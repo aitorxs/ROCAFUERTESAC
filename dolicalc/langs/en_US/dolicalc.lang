@@ -1,0 +1,30 @@
+# <one line to give the program's name and a brief idea of what it does.>
+# Copyright (C) <year>  <name of author>
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+#
+# Generic
+#
+
+Module514000Name = DoliCalc
+Module514000Desc = A calculator at your fingertips
+
+DoliCalcAbout = <a href="http://www.dolistore.com/" target="_blank"><b>DoliCalc</b></a> : A Dolibarr Calculator<br/><br/>Developed by <a href="https://github.com/AXeL-dev" target="_blank">AXeL</a><br/><br/>For any question or feedback, contact me on <a href="mailto:anass_denna@hotmail.fr">anass_denna@hotmail.fr</a><br><br>Find my other modules on <a href="http://www.dolistore.com/search.php?orderby=position&orderway=desc&search_query=axel-dev&submit_search=Rechercher" target="_blank">Dolistore</a>
+
+Setup = Module setup
+About = About module
+Settings = Settings
+
+NoSetupAvailable = No setup available. You can start using the calculator by clicking on the top right icon.

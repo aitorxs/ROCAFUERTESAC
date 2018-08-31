@@ -1,0 +1,124 @@
+body {
+    font-family:verdana;
+    position: relative;
+    font-size: 10px;
+    letter-spacing: 1px;
+}
+.logo{
+	position: absolute;
+    margin-top: -20px;
+    width: 120px;
+    height: 60px;
+    left: 40;
+}
+.usuario{
+    position: absolute;
+    top:25px;
+    left: 15px;
+}
+.factdate{
+    position: absolute;
+    top: -20px;
+    right: 30PX;
+    width: 300px;
+    font-size: 15px;
+}
+.cpago{
+    position: absolute;
+    top: 18px;
+    right: 220PX;
+    width: 300px;
+    font-size: 12px;
+}
+.vendedor{
+    position: absolute;
+    top: -18px;
+    right: 250PX;
+    width: 300px;
+    font-size: 12px;
+}
+.almacen{
+    position: absolute;
+    top: -18px;
+    right: 430PX;
+    width: 300px;
+    font-size: 12px;
+}
+.hora {
+    top: 0px;
+    text-align: right;
+    position: absolute;
+    right: 80px;
+    font-size: 15px;
+}
+.cliente{
+    top: 0px;
+    text-align: right;
+    position: absolute;
+    left: 250;
+
+}
+.ruc{
+    top: 10px;
+    text-align: right;
+    position: absolute;
+    left: 250px;  
+}
+
+.direccion{
+    top: 22px;
+    text-align: right;
+    position: absolute;
+    left: 250px;
+}
+.listado{
+
+    margin-top: 10px;
+    letter-spacing: 1px;
+}
+td.item {
+    text-align: center;
+    width: 10%; 
+    font-size: 10px;
+}
+td.descripcion {
+    text-align: left;
+    font-size: 12px;
+}td.unidad{
+    position: absolute;
+    left: 480px;
+    font-size: 10px;
+}
+td.cantidad{
+    position: absolute;
+    left: 600px;
+    font-size: 10px;
+}
+ td.precio {
+    position: absolute;
+    left: 750px;  
+    font-size: 10px; 
+}
+td.pventa {
+	text-align: left;
+	position: absolute;
+	left: 840px;
+	width: 15%;
+    font-size: 10px;
+}
+td.total {
+    text-align: left;
+    position: absolute;
+    right: 120px;
+    
+    font-weight: bold;
+    font-size: 13px;
+}
+ td.textwords{
+    font-size: 12px;
+}
+
+
+.datagrid table { border-collapse: collapse; text-align: left;  } 
+.datagrid {border: 1px solid #8C8C8C;  }
+.datagrid table tbody td {  border-left: 1px solid #DBDBDB; }

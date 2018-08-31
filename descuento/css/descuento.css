@@ -1,0 +1,17 @@
+/*CSS módulo de Descuento*/
+#div_mensaje {
+	color: #FF0000;
+	font-weight: bold;
+	padding: 6px;
+	width: 100%;
+	text-align: center;
+}
+img.eliminar_descuento {
+	cursor: pointer;
+}
+input#cantidad{
+	width: 40px;
+}
+select {
+	width: 110px;
+}

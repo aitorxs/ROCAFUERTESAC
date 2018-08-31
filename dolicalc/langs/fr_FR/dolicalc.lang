@@ -1,0 +1,30 @@
+# <one line to give the program's name and a brief idea of what it does.>
+# Copyright (C) <year>  <name of author>
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+#
+# Generic
+#
+
+Module514000Name = DoliCalc
+Module514000Desc = Une calculatrice au bout des doigts
+
+DoliCalcAbout = <a href="http://www.dolistore.com/" target="_blank"><b>DoliCalc</b></a> : Une calculette pour Dolibarr<br/><br/>Développé par <a href="https://github.com/AXeL-dev" target="_blank">AXeL</a><br/><br/>Pour toute question technique ou retour, contactez-moi sur <a href="mailto:anass_denna@hotmail.fr">anass_denna@hotmail.fr</a><br><br>Retrouvez mes autres modules sur <a href="http://www.dolistore.com/search.php?orderby=position&orderway=desc&search_query=axel-dev&submit_search=Rechercher" target="_blank">Dolistore</a>
+
+Setup = Configuration du module
+About = A propos du module
+Settings = Paramètres
+
+NoSetupAvailable = Pas de configuration nécessaire. Une icône vous permettant d'utiliser la calculette est maintenant disponible en haut à droite.
