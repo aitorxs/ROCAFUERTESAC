@@ -2507,19 +2507,19 @@ if ($action == 'create' && $user->rights->commande->creer)
 				//MACHFREE
 
 				?>
-				<link REL="stylesheet" href="../commande/tpl/style.css" type="text/css" />
+				<link REL="stylesheet" href="../commande/tpl/style.modal.css" type="text/css" />
 				<script type="text/javascript" src="../commande/tpl/script.js"></script>
 
 				       
-		<div class="inline-block divButAction" onclick='jmgModal("miventana",{
-                width: 1000,
-                height: 60,
-        	content: "<iframe src=\"https://escss.blogspot.com.sdsd.\"></iframe>"});'
-       				 ><a class="butAction" >Imprimir</a></div>
-				<?php
+				<div class="inline-block divButAction" onclick='jmgModal("miventana",{
+					title: "Vista previa",
+               		 width: 1100,
+               		 height: 80,
+        			content: "<iframe   <?php print 'src=\"'. DOL_URL_ROOT. '/commande/impresion.php?id='. $object->id .'\" ' ?>  > </iframe>"});'
+       			><a class="butAction" >Imprimir</a></div>
+   		 
 
-				print '<div class="inline-block divButAction"><a class="butAction" href="'. DOL_URL_ROOT. '/commande/impresion.php?id='. $object->id .'"; target="_blank" >Imprimir Guia</a></div>';
-
+			<?php
 
 				// Valid
 				if ($object->statut == Commande::STATUS_DRAFT && $object->total_ttc >= 0 && $numlines > 0 &&

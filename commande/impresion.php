@@ -71,15 +71,12 @@ llxHeader1( );
                     $now = dol_now();
                     print "NOTA DE PEDIDO: ".$object->ref; ?>
             </p>
-            <p class='vendedor'>Vendedor:<?php echo $object->vendedor; ?></p>
-            <p class='almacen'>Almacen: <?php echo $obj->almacen; ?></p>
         </div>
         <p class="hora">
             <?php
             // Recuperation et affichage de la date et de l'heure
             $now = dol_now();
-            print "Fecha: ".dol_print_date($object->date_livraison,'daytext');
-
+            print "Fecha de entrega: ".dol_print_date($object->date_livraison,'daytext');
             ?>
         </p>
     </div>
@@ -93,36 +90,19 @@ llxHeader1( );
         $soc->fetch($object->socid);
 
     ?>
-    <?php echo "<img  src='tpl/jovilse.png' class='logo' >"; ?>
-    <div><p class="usuario">Celular: 943928225 - 945362831 </p></div>
+    <?php echo "<img  class='logo'  src='tpl/logo.rocafuerte.png' >"; ?>
     <p class='cliente'>NOMBRE: <?php echo $soc->nom; ?></p> <br>
     <p class='ruc'>RUC: <?php echo $soc->code_client; ?></p> <br>
     <p class='direccion'>DIRECCIÓN:<?php print $soc->address; ?> </p><br>  
-    
-    <?php 
-       print '<div class="cpago"> Condiciones de Pago: ';
-        if ($action == 'editconditions') {
-            $form->form_conditions_reglement($_SERVER['PHP_SELF'] . '?id=' . $object->id, $object->cond_reglement_id, 'cond_reglement_id', 1);
-        } else {
-            $form->form_conditions_reglement($_SERVER['PHP_SELF'] . '?id=' . $object->id, $object->cond_reglement_id, 'none', 1);
-            
-        }
-        print '</div>';
-
-    ?>
-
 
 <div class="listado">
     <div class="datagrid">
         <div class="datagrid">
         <table class="">
             <tr>
-                <td class="item"><b>ITEM</td>
                 <td class="descripcion"><b>DESCRIPCIÓN</td>
                 <td class="unidad"><b>UNIDAD</td>
                 <td class="cantidad"><b>CANTIDAD</td>
-                <td class="precio"><b>P.UNIT</td>
-                <td class="pventa"><b>V.VENTA</td>
             </tr>
         </table>
         </div>
@@ -131,20 +111,7 @@ llxHeader1( );
                 $ret = $object->printObjectLinespedido($soc, $lineid, 1);
             ?>
         </table>
-        <div class="datagrid">
-            <table>
-                <tr>
-                    
-                    <?php
-                    $numer=$langs->trans($object->total_ttc, 1, '', 1, - 1, - 1 );
-                    $str = $langs->getLabelFromNumber($numer,0|1);
-                    $str = strtoupper($str);
-                    echo '<td class="textwords">SON:  '.$str.'</td>';
-                    echo '<td class="total" >TOTAL: S/ ' .number_format($object->total_ttc,2,'.',',')."</td>";
-                ?>
-                </tr>
-            </table>
-        </div>
+
 
 
 
@@ -153,4 +120,6 @@ llxHeader1( );
   
          
     
-
+<script type="text/javascript">
+    window.print();
+</script>

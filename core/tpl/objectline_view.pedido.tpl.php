@@ -7,7 +7,7 @@
     <?php if (! empty($conf->global->MAIN_VIEW_LINE_NUMBER)) { ?>
 
     <?php } ?>
-    <td class="item"><?php $coldisplay++; ?>
+   <!--  <td class="item"><?php $coldisplay++; ?>
     <?php if ((($line->info_bits & 2) != 2) && $line->special_code != 3) {
             // I comment this because it shows info even when not required
             // for example always visible on invoice but must be visible only if stock module on and stock decrease option is on invoice validation and status is not validated
@@ -16,7 +16,7 @@
             echo $line->item;
 
         } else  ?>
-    </td>
+    </td>-->
     <td class="descripcion">  
         <?php if (($line->info_bits & 2) == 2) { ?>
 
@@ -70,8 +70,8 @@
         } else  ?>
     </td>
     <!-- <td class="precio"><?php $coldisplay++; ?><?php  $tth=$line->multicurrency_total_ttc/$line->qty; printf("%.2f",intval(($tth*100))/100); ?>
-    </td> -->
-    <td class="precio"><?php $coldisplay++; ?><?php echo price(round($line->subprice*1.18,2)); ?></td>
+    </td> 
+   <td class="precio"><?php $coldisplay++; ?><?php echo price(round($line->subprice*1.18,2)); ?></td>
         
     <?php if ($conf->global->MAIN_FEATURES_LEVEL > 1) { ?>   
 
@@ -88,13 +88,13 @@
     <td align="right" class="pventa"><?php $coldisplay++; ?><?php echo $langs->trans('Option'); ?></td>
     <?php } else { ?>
     
-    <!--  <td align="right" class="total"><?php $coldisplay++; ?><?php  $total_t=$line->total_ttc; //echo price(price2num($total_t,'MT')); 
-    //echo number_format($total_t,2,'.',','); ?></td> -->
+     <td align="right" class="total"><?php $coldisplay++; ?><?php  $total_t=$line->total_ttc; //echo price(price2num($total_t,'MT')); 
+    //echo number_format($total_t,2,'.',','); ?></td> 
   
   <td align="right" class="pventa"><?php $coldisplay++; ?><?php  $total_t=$line->multicurrency_total_ttc; echo price(price2num($total_t,'MT'));  ?></td>
   
-     <!-- <td align="right" class="total"><?php $coldisplay++; ?><?php //echo price(price2num($line->total_ht*1.18,'MT')); ?></td> -->
+      <td align="right" class="total"><?php $coldisplay++; ?><?php //echo price(price2num($line->total_ht*1.18,'MT')); ?></td> 
     <?php } ?>
 </tr>
-<!-- listado de producto para boleta obedic....................................... -->
+listado de producto para boleta obedic....................................... -->
 
