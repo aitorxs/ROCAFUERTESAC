@@ -1,7 +1,6 @@
 # Dolibarr language file - Source file is en_US - categories
 Rubrique=Etiqueta/Categoría
 Rubriques=Etiqueta/Categoría
-RubriquesTransactions=Etiquetas/Categorías de transacciones
 categories=etiquetas/categorías
 NoCategoryYet=Ninguna etiqueta/categoría de este tipo creada
 In=En
@@ -78,11 +77,10 @@ CatCusLinks=Enlaces entre clientes/clientes potenciales y etiquetas/categorías
 CatProdLinks=Enlaces entre productos/servicios y etiquetas/categorías
 CatProJectLinks=Enlaces entre proyectos y etiquetas/categorías
 DeleteFromCat=Eliminar de la etiqueta/categoría
-ExtraFieldsCategories=Campos adicionales
+ExtraFieldsCategories=Atributos complementarios
 CategoriesSetup=Configuración de etiquetas/categorías
 CategorieRecursiv=Enlazar con la etiqueta/categoría automáticamente
 CategorieRecursivHelp=Si está activado, el producto se enlazará a la categoría padre si lo añadimos a una subcategoría
 AddProductServiceIntoCategory=Añadir el siguiente producto/servicio
 ShowCategory=Mostrar etiqueta/categoría
 ByDefaultInList=Por defecto en lista
-ChooseCategory=Choose category

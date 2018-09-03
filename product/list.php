@@ -260,10 +260,10 @@ else
 	$texte = $langs->trans("ProductsAndServices");
 }
 
-$sql = 'SELECT DISTINCT p.rowid, p.ref, p.label, p.fk_product_type, p.barcode, p.price, p.price_ttc, p.price_base_type, p.entity,';
+$sql = 'SELECT DISTINCT p.rowid , p.ref, p.label, p.fk_product_type, p.barcode, p.price, p.price_ttc, p.price_base_type, p.entity,';//machfree
 $sql.= ' p.fk_product_type, p.duration, p.tosell, p.tobuy, p.seuil_stock_alerte, p.desiredstock,';
 $sql.= ' p.tobatch, p.accountancy_code_sell, p.accountancy_code_sell_intra, p.accountancy_code_sell_export, p.accountancy_code_buy,';
-$sql.= ' p.datec as date_creation, p.tms as date_update, p.pmp,';
+$sql.= ' p.datec as date_creation, p.tms as date_update, p.pmp, ';
 $sql.= ' MIN(pfp.unitprice) as minsellprice';
 if (!empty($conf->variants->enabled) && $search_hidechildproducts && ($search_type === 0)) {
 	$sql .= ', pac.rowid prod_comb_id';
@@ -276,23 +276,24 @@ if (! empty($extrafields->attributes[$object->table_element]['label'])) {
 $parameters=array();
 $reshook=$hookmanager->executeHooks('printFieldListSelect',$parameters);    // Note that $action and $object may have been modified by hook
 $sql.=$hookmanager->resPrint;
-$sql.= ' FROM '.MAIN_DB_PREFIX.'product as p';
+$sql.= ' FROM '.MAIN_DB_PREFIX.'product as p ';
 if (is_array($extrafields->attributes[$object->table_element]['label']) && count($extrafields->attributes[$object->table_element]['label'])) $sql.= " LEFT JOIN ".MAIN_DB_PREFIX."product_extrafields as ef on (p.rowid = ef.fk_object)";
+	
 if (! empty($search_categ) || ! empty($catid)) $sql.= ' LEFT JOIN '.MAIN_DB_PREFIX."categorie_product as cp ON p.rowid = cp.fk_product"; // We'll need this table joined to the select in order to filter by categ
 $sql.= " LEFT JOIN ".MAIN_DB_PREFIX."product_fournisseur_price as pfp ON p.rowid = pfp.fk_product";
 // multilang
 if (! empty($conf->global->MAIN_MULTILANGS)) $sql.= " LEFT JOIN ".MAIN_DB_PREFIX."product_lang as pl ON pl.fk_product = p.rowid AND pl.lang = '".$langs->getDefaultLang() ."'";
 if (!empty($conf->variants->enabled) && $search_hidechildproducts && ($search_type === 0)) {
-	$sql .= " LEFT JOIN ".MAIN_DB_PREFIX."product_attribute_combination pac ON pac.fk_product_child = p.rowid";
+	$sql .= " LEFT JOIN ".MAIN_DB_PREFIX."product_attribute_combination pac ON pac.fk_product_child = p.rowid ";
 }
 
-$sql.= ' WHERE p.entity IN ('.getEntity('product').')';
+$sql.= ' WHERE  p.entity IN ('.getEntity('product').')   ';
 if ($sall) $sql .= natural_search(array_keys($fieldstosearchall), $sall);
 // if the type is not 1, we show all products (type = 0,2,3)
 if (dol_strlen($search_type) && $search_type != '-1')
 {
-	if ($search_type == 1) $sql.= " AND p.fk_product_type = 1";
-	else $sql.= " AND p.fk_product_type <> 1";
+	if ($search_type == 1) $sql.= " AND p.fk_product_type = 1 ";
+	else $sql.= " AND p.fk_product_type <> 1   ";
 }
 if ($search_ref)     $sql .= natural_search('p.ref', $search_ref);
 if ($search_label)   $sql .= natural_search('p.label', $search_label);
@@ -300,22 +301,23 @@ if ($search_barcode) $sql .= natural_search('p.barcode', $search_barcode);
 if (isset($search_tosell) && dol_strlen($search_tosell) > 0  && $search_tosell!=-1) $sql.= " AND p.tosell = ".$db->escape($search_tosell);
 if (isset($search_tobuy) && dol_strlen($search_tobuy) > 0  && $search_tobuy!=-1)   $sql.= " AND p.tobuy = ".$db->escape($search_tobuy);
 if (dol_strlen($canvas) > 0)                    $sql.= " AND p.canvas = '".$db->escape($canvas)."'";
-if ($catid > 0)     $sql.= " AND cp.fk_categorie = ".$catid;
-if ($catid == -2)   $sql.= " AND cp.fk_categorie IS NULL";
-if ($search_categ > 0)   $sql.= " AND cp.fk_categorie = ".$db->escape($search_categ);
-if ($search_categ == -2) $sql.= " AND cp.fk_categorie IS NULL";
+if ($catid > 0)     $sql.= " AND cp.fk_categorie = ".$catid ;
+   $sql.= "";
+if ($catid == -2)   $sql.= " AND cp.fk_categorie IS NULL  ";
+if ($search_categ > 0)   $sql.= " AND cp.fk_categorie = ".$db->escape($search_categ) ;
+if ($search_categ == -2) $sql.= " AND cp.fk_categorie IS NULL ";
 if ($fourn_id > 0)  $sql.= " AND pfp.fk_soc = ".$fourn_id;
 if ($search_tobatch != '' && $search_tobatch >= 0)   $sql.= " AND p.tobatch = ".$db->escape($search_tobatch);
 if ($search_accountancy_code_sell) $sql.= natural_search('p.accountancy_code_sell', $search_accountancy_code_sell);
 if ($search_accountancy_code_buy)  $sql.= natural_search('p.accountancy_code_buy', $search_accountancy_code_buy);
-if (!empty($conf->variants->enabled) && $search_hidechildproducts && ($search_type === 0)) $sql .= " AND pac.rowid IS NULL";
+if (!empty($conf->variants->enabled) && $search_hidechildproducts && ($search_type === 0)) $sql .= " AND pac.rowid IS NULL  ";
 // Add where from extra fields
 include DOL_DOCUMENT_ROOT.'/core/tpl/extrafields_list_search_sql.tpl.php';
 // Add where from hooks
 $parameters=array();
 $reshook=$hookmanager->executeHooks('printFieldListWhere',$parameters);    // Note that $action and $object may have been modified by hook
 $sql.=$hookmanager->resPrint;
-$sql.= " GROUP BY p.rowid, p.ref, p.label, p.barcode, p.price, p.price_ttc, p.price_base_type,";
+$sql.= " GROUP BY  p.rowid, p.ref, p.label, p.barcode, p.price, p.price_ttc, p.price_base_type,";
 $sql.= " p.fk_product_type, p.duration, p.tosell, p.tobuy, p.seuil_stock_alerte, p.desiredstock,";
 $sql.= ' p.datec, p.tms, p.entity, p.tobatch, p.accountancy_code_sell, p.accountancy_code_sell_intra, p.accountancy_code_sell_export, p.accountancy_code_buy, p.pmp';
 if (!empty($conf->variants->enabled) && $search_hidechildproducts && ($search_type === 0)) $sql .= ', pac.rowid';
@@ -657,6 +659,7 @@ if ($resql)
 		if (! empty($arrayfields['p.seuil_stock_alerte']['checked']))  print_liste_field_titre($arrayfields['p.seuil_stock_alerte']['label'], $_SERVER["PHP_SELF"],"p.seuil_stock_alerte","",$param,'align="right"',$sortfield,$sortorder);
 		if (! empty($arrayfields['p.desiredstock']['checked']))  print_liste_field_titre($arrayfields['p.desiredstock']['label'], $_SERVER["PHP_SELF"],"p.desiredstock","",$param,'align="right"',$sortfield,$sortorder);
 		if (! empty($arrayfields['p.stock']['checked']))  print_liste_field_titre($arrayfields['p.stock']['label'], $_SERVER["PHP_SELF"],"p.stock","",$param,'align="right"',$sortfield,$sortorder);
+		if (! empty($arrayfields['p.stock']['checked']))  print_liste_field_titre('Pedido', $_SERVER["PHP_SELF"],"p.stock","",$param,'align="right"',$sortfield,$sortorder); //MACHFREE
 		if (! empty($arrayfields['stock_virtual']['checked']))  print_liste_field_titre($arrayfields['stock_virtual']['label'], $_SERVER["PHP_SELF"],"","",$param,'align="right"',$sortfield,$sortorder);
 		if (! empty($arrayfields['p.tobatch']['checked']))  print_liste_field_titre($arrayfields['p.tobatch']['label'], $_SERVER["PHP_SELF"],"p.tobatch","",$param,'align="center"',$sortfield,$sortorder);
 		if (! empty($arrayfields['p.accountancy_code_sell']['checked']))  print_liste_field_titre($arrayfields['p.accountancy_code_sell']['label'], $_SERVER["PHP_SELF"],"p.accountancy_code_sell","",$param,'',$sortfield,$sortorder);
@@ -709,6 +712,7 @@ if ($resql)
 			$product_static->status_buy = $obj->tobuy;
 			$product_static->status     = $obj->tosell;
 			$product_static->status_batch = $obj->tobatch;
+			$product_static->status_batch = $obj->stockpedido;
 			$product_static->entity = $obj->entity;
 			$product_static->pmp = $obj->pmp;
 			$product_static->accountancy_code_sell = $obj->accountancy_code_sell;
@@ -875,6 +879,56 @@ if ($resql)
 				print '</td>';
 				if (! $i) $totalarray['nbfield']++;
 			}
+
+
+
+			// Stock en pedido MACHFREE
+			if (! empty($arrayfields['p.stock']['checked']))
+			{
+				$registro=$obj->rowid;;
+
+				//conexion a la base de datos de manera normal
+				$hostname = "localhost";
+				$database = "rocafuertesac";
+				$username = "root";
+				$password = "";
+				$conn = mysql_pconnect($hostname, $username, $password) or die(mysq_error());
+				mysql_select_db($database, $conn); 
+
+
+				$q='SELECT DISTINCT p.rowid, cfd.fk_product,cfd.qty as stockpedido, cfd.rowid as IDpedido  , cf.fk_statut as estadopedido, cf.date_livraison as tiempoentrega, cf.ref as cfreferencia FROM llx_product as p LEFT JOIN llx_commande_fournisseurdet as cfd  ON (p.rowid=cfd.fk_product ) LEFT JOIN  llx_commande_fournisseur as cf  ON  (cfd.rowid=cf.rowid) where cfd.fk_product="'.$registro.'" and cf.fk_statut!=5';
+					$sql= mysql_query($q, $conn)or die(mysql_error());
+
+				print '<td align="right">';
+				?>
+					<select name="clientes">
+					<?php
+					while($row = mysql_fetch_array($sql))
+					{
+						$fecha_inicial = date("Y/m/d", strtotime($row['tiempoentrega']));
+		                $fecha_final= date("Y/m/d");
+		                $inicio = strtotime($fecha_inicial);
+		                $fin = strtotime($fecha_final);
+		                $dif = $fin - $inicio;
+		                  $diasFalt = (( ( $dif / 60 ) / 60 ) / 24);
+		                $diasFalt =  ceil($diasFalt);
+					?>
+
+						<OPTION <?php echo '< title="Días en llegar: '.abs($diasFalt).'">'; echo ''.$row['stockpedido'].''; ?> </OPTION>
+					<?php
+					}
+					?>
+					</select>
+					
+					<?php
+					
+				print '</td>';
+				if (! $i) $totalarray['nbfield']++;
+
+			}
+
+
+
 			// Stock virtual
 			if (! empty($arrayfields['stock_virtual']['checked']))
 			{
