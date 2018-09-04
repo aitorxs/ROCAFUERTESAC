@@ -3066,13 +3066,14 @@ class Product extends CommonObject
 	 *  @param		float	$quantity	Quantity minimum for price
 	 *  @return     int         		< 0 if KO, 0 if link already exists for this product, > 0 if OK
 	 */
-	function add_fournisseur($user, $id_fourn, $ref_fourn, $quantity)
-	{
+
+	function add_fournisseur($user, $id_fourn, $ref_fourn, $quantity,$preciocompra,$poliza,$flete)
+{
 		global $conf;
 
 		$now=dol_now();
 
-    	dol_syslog(get_class($this)."::add_fournisseur id_fourn = ".$id_fourn." ref_fourn=".$ref_fourn." quantity=".$quantity, LOG_DEBUG);
+    	dol_syslog(get_class($this)."::add_fournisseur id_fourn = ".$id_fourn." ref_fourn=".$ref_fourn." quantity=".$quantity." preciocompra=".$preciocompra." poliza=".$poliza." flete=".$flete, LOG_DEBUG);
 
 		if ($ref_fourn)
 		{
@@ -3121,6 +3122,9 @@ class Product extends CommonObject
 				$sql.= ", fk_soc";
 				$sql.= ", ref_fourn";
 				$sql.= ", quantity";
+				$sql.= ", preciocompra";
+				$sql.= ", poliza";
+				$sql.= ", flete";
 				$sql.= ", fk_user";
 				$sql.= ", tva_tx";
 				$sql.= ") VALUES (";
@@ -3130,6 +3134,9 @@ class Product extends CommonObject
 				$sql.= ", ".$id_fourn;
 				$sql.= ", '".$this->db->escape($ref_fourn)."'";
 				$sql.= ", ".$quantity;
+				$sql.= ", ".$preciocompra;
+				$sql.= ", ".$poliza;
+				$sql.= ", ".$flete;
 				$sql.= ", ".$user->id;
 				$sql.= ", 0";
 				$sql.= ")";

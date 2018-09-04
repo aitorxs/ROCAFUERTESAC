@@ -75,6 +75,10 @@ class ProductFournisseur extends Product
     var $fourn_multicurrency_tx;
     var $fourn_multicurrency_price;
     var $fourn_multicurrency_unitprice;
+    var $preciocompra;
+    var $poliza;
+    var $flete;
+
 
     /**
 	 *	Constructor
@@ -198,7 +202,7 @@ class ProductFournisseur extends Product
      *    @param  	string		$multicurrency_code	            Currency code
      *    @return	int								<0 if KO, >=0 if OK
      */
-    function update_buyprice($qty, $buyprice, $user, $price_base_type, $fourn, $availability, $ref_fourn, $tva_tx, $charges=0, $remise_percent=0, $remise=0, $newnpr=0, $delivery_time_days=0, $supplier_reputation='', $localtaxes_array=array(), $newdefaultvatcode='', $multicurrency_buyprice=0, $multicurrency_price_base_type='HT',$multicurrency_tx=1,$multicurrency_code='')
+    function update_buyprice($qty, $buyprice, $user, $price_base_type, $fourn, $availability, $ref_fourn, $tva_tx, $charges=0, $remise_percent=0, $remise=0, $newnpr=0, $delivery_time_days=0, $supplier_reputation='', $localtaxes_array=array(), $newdefaultvatcode='', $multicurrency_buyprice=0, $multicurrency_price_base_type='HT',$multicurrency_tx=1,$multicurrency_code='',$preciocompra, $poliza, $flete)
     {
         global $conf, $langs;
         //global $mysoc;
@@ -283,6 +287,9 @@ class ProductFournisseur extends Product
             $sql.= " multicurrency_code = ".(isset($multicurrency_code)?"'".$this->db->escape($multicurrency_code)."'":'null').",";
 			$sql.= " entity = ".$conf->entity.",";
 			$sql.= " tva_tx = ".price2num($tva_tx).",";
+            $sql.= " preciocompra = ".$preciocompra.","; //machfree
+            $sql.= " poliza = ".$poliza.",";//machfree
+            $sql.= " flete = ".$flete.",";//machfree
 			// TODO Add localtax1 and localtax2
 			//$sql.= " localtax1_tx=".($localtax1>=0?$localtax1:'NULL').",";
 			//$sql.= " localtax2_tx=".($localtax2>=0?$localtax2:'NULL').",";
@@ -437,7 +444,7 @@ class ProductFournisseur extends Product
 
         $sql = "SELECT pfp.rowid, pfp.price, pfp.quantity, pfp.unitprice, pfp.remise_percent, pfp.remise, pfp.tva_tx, pfp.default_vat_code, pfp.info_bits as fourn_tva_npr, pfp.fk_availability,";
         $sql.= " pfp.fk_soc, pfp.ref_fourn, pfp.fk_product, pfp.charges, pfp.fk_supplier_price_expression, pfp.delivery_time_days,";
-        $sql.= " pfp.supplier_reputation";
+        $sql.= " pfp.supplier_reputation, pfp.preciocompra, pfp.poliza, pfp.flete";//machfree
         $sql.= " ,pfp.multicurrency_price, pfp.multicurrency_unitprice, pfp.multicurrency_tx, pfp.fk_multicurrency, pfp.multicurrency_code";
         $sql.= " FROM ".MAIN_DB_PREFIX."product_fournisseur_price as pfp";
         $sql.= " WHERE pfp.rowid = ".$rowid;
@@ -476,6 +483,9 @@ class ProductFournisseur extends Product
                 $this->fourn_multicurrency_tx          = $obj->multicurrency_tx;
                 $this->fourn_multicurrency_id          = $obj->fk_multicurrency;
                 $this->fourn_multicurrency_code        = $obj->multicurrency_code;
+                $this->preciocompra                    = $obj->preciocompra; //machfree
+                $this->poliza                          = $obj->poliza;//machfree
+                $this->flete                           = $obj->flete;//machfree
 
                 if (empty($ignore_expression) && !empty($this->fk_supplier_price_expression))
                 {
@@ -526,7 +536,7 @@ class ProductFournisseur extends Product
 
         $sql = "SELECT s.nom as supplier_name, s.rowid as fourn_id,";
         $sql.= " pfp.rowid as product_fourn_pri_id, pfp.ref_fourn, pfp.fk_product as product_fourn_id, pfp.fk_supplier_price_expression,";
-        $sql.= " pfp.price, pfp.quantity, pfp.unitprice, pfp.remise_percent, pfp.remise, pfp.tva_tx, pfp.fk_availability, pfp.charges, pfp.info_bits, pfp.delivery_time_days, pfp.supplier_reputation";
+        $sql.= " pfp.price, pfp.quantity, pfp.unitprice, pfp.remise_percent, pfp.remise, pfp.tva_tx, pfp.fk_availability, pfp.charges, pfp.info_bits, pfp.delivery_time_days, pfp.supplier_reputation,pfp.preciocompra, pfp.poliza, pfp.flete";
         $sql.= " ,pfp.multicurrency_price, pfp.multicurrency_unitprice, pfp.multicurrency_tx, pfp.fk_multicurrency, pfp.multicurrency_code";
         $sql.= " FROM ".MAIN_DB_PREFIX."product_fournisseur_price as pfp";
         $sql.= ", ".MAIN_DB_PREFIX."societe as s";
@@ -574,6 +584,9 @@ class ProductFournisseur extends Product
                 $prodfourn->fourn_multicurrency_tx          = $record["multicurrency_tx"];
                 $prodfourn->fourn_multicurrency_id          = $record["fk_multicurrency"];
                 $prodfourn->fourn_multicurrency_code        = $record["multicurrency_code"];
+                $prodfourn->preciocompra                    = $record["preciocompra"];//machfree
+                $prodfourn->poliza                          = $record["poliza"];//machfree
+                $prodfourn->flete                           = $record["flete"];//machfree
 
                 if (!empty($conf->dynamicprices->enabled) && !empty($prodfourn->fk_supplier_price_expression)) {
                     $priceparser = new PriceParser($this->db);
