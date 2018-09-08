@@ -620,12 +620,14 @@ if ($resql)
 			print '<td class="liste_titre">';
 			print '</td>';
 		}
+
 		// Date modification
 		if (! empty($arrayfields['p.tms']['checked']))
 		{
 			print '<td class="liste_titre">';
 			print '</td>';
 		}
+		print "<td></td>";//machfree
 		if (! empty($arrayfields['p.tosell']['checked']))
 		{
 			print '<td class="liste_titre" align="right">';
@@ -638,6 +640,7 @@ if ($resql)
 			print $form->selectarray('search_tobuy', array('0'=>$langs->trans('ProductStatusNotOnBuyShort'),'1'=>$langs->trans('ProductStatusOnBuyShort')),$search_tobuy,1);
 			print '</td>';
 		}
+
 		print '<td class="liste_titre" align="middle">';
 		$searchpicto=$form->showFilterButtons();
 		print $searchpicto;
@@ -880,58 +883,64 @@ if ($resql)
 				if (! $i) $totalarray['nbfield']++;
 			}
 
-
-
 			// Stock en pedido MACHFREE
 			if (! empty($arrayfields['p.stock']['checked']))
 			{
 				$registro=$obj->rowid;;
 
 				//conexion a la base de datos de manera normal
-				$hostname = "localhost";
-				$database = "rocafuertesac";
-				$username = "root";
-				$password = "";
+				$hostname = $dolibarr_main_db_host;
+				$database = $dolibarr_main_db_name;
+				$username = $dolibarr_main_db_user;
+				$password = $dolibarr_main_db_pass;
 				$conn = mysql_pconnect($hostname, $username, $password) or die(mysq_error());
 				mysql_select_db($database, $conn); 
 
-
-				$sql='SELECT DISTINCT p.rowid, cfd.fk_product,cfd.qty as stockpedido, cfd.rowid as IDpedido  , cf.fk_statut as estadopedido, cf.date_livraison as tiempoentrega, cf.ref as cfreferencia FROM llx_product as p LEFT JOIN llx_commande_fournisseurdet as cfd  ON (p.rowid=cfd.fk_product ) LEFT JOIN  llx_commande_fournisseur as cf  ON  (cfd.rowid=cf.rowid) where cfd.fk_product="'.$registro.'" and cf.fk_statut!=5';
-
-					$res = $db->query($sql);
-					$obj = $db->fetch_object($res);
-
+				$sql='SELECT DISTINCT p.rowid, cfd.fk_product,cfd.qty as stockpedido, cfd.rowid as IDpedido  , cf.fk_statut as estadopedido, cf.date_livraison as tiempoentrega, cf.ref as cfreferencia FROM llx_product as p LEFT JOIN llx_commande_fournisseurdet as cfd  ON (p.rowid=cfd.fk_product ) LEFT JOIN  llx_commande_fournisseur as cf  ON  (cfd.rowid=cf.rowid) where cfd.fk_product="'.$registro.'" and cf.fk_statut>=2 and cf.fk_statut<=4';
 					$sq= mysql_query($sql, $conn)or die(mysql_error());
 
 				print '<td align="right">';
 				?>
 					<select name="clientes">
 					<?php
+					
 					while($row = mysql_fetch_array($sq))
 					{
+						
+						$fecha=date("1969/12/31");
 						$fecha_inicial = date("Y/m/d", strtotime($row['tiempoentrega']));
 		                $fecha_final= date("Y/m/d");
 		                $inicio = strtotime($fecha_inicial);
 		                $fin = strtotime($fecha_final);
-		                $dif = $fin - $inicio;
-		                  $diasFalt = (( ( $dif / 60 ) / 60 ) / 24);
+						
+						if( $fecha_inicial != $fecha){
+		                $dif =$inicio-  $fin;
+		                $diasFalt = (( ( $dif / 60 ) / 60 ) / 24);
 		                $diasFalt =  ceil($diasFalt);
+		               	}else{
+							$diasFalt =  'Error en fecha';
+						}
+
 					?>
 
-						<OPTION <?php echo '< title="Días en llegar: '.abs($diasFalt).'">'; echo ''.$row['stockpedido'].''; ?> </OPTION>
+						<OPTION <?php if( $diasFalt >= 0){ 
+							echo '< title="Días en llegar: '.$diasFalt.'">';
+							}else{
+							echo '< title="Días de retraso: '.$diasFalt.'">';
+							}
+							 echo ''.$row['stockpedido'].''; ?> </OPTION>
 					<?php
+					
+						
 					}
 					?>
 					</select>
 					
 					<?php
-					
 				print '</td>';
 				if (! $i) $totalarray['nbfield']++;
 
 			}
-
-
 
 			// Stock virtual
 			if (! empty($arrayfields['stock_virtual']['checked']))

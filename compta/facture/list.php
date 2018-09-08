@@ -284,7 +284,7 @@ if ($massaction == 'withdrawrequest')
 				}
 
 				$rsql = "SELECT pfd.rowid, pfd.traite, pfd.date_demande as date_demande";
-				$rsql .= " , pfd.date_traite as date_traite";
+				$rsql .= " , pfd.date_traite as date_traite, f.date_lim_reglement as datelimite,";//machfre
 				$rsql .= " , pfd.amount";
 				$rsql .= " , u.rowid as user_id, u.lastname, u.firstname, u.login";
 				$rsql .= " FROM ".MAIN_DB_PREFIX."prelevement_facture_demande as pfd";
@@ -862,7 +862,7 @@ if ($resql)
 	// Status
 	if (! empty($arrayfields['f.fk_statut']['checked']))
 	{
-		print '<td class="liste_titre maxwidthonsmartphone" align="right">';
+		print '<td colspan="2" class="liste_titre maxwidthonsmartphone" align="right">';
 		$liststatus=array('0'=>$langs->trans("BillShortStatusDraft"), '1'=>$langs->trans("BillShortStatusNotPaid"), '2'=>$langs->trans("BillShortStatusPaid"), '1,2'=>$langs->trans("BillShortStatusNotPaid").'+'.$langs->trans("BillShortStatusPaid"), '3'=>$langs->trans("BillShortStatusCanceled"));
 		print $form->selectarray('search_status', $liststatus, $search_status, 1);
 		print '</td>';
@@ -904,6 +904,7 @@ if ($resql)
 	if (! empty($arrayfields['f.datec']['checked']))     print_liste_field_titre($arrayfields['f.datec']['label'],$_SERVER["PHP_SELF"],"f.datec","",$param,'align="center" class="nowrap"',$sortfield,$sortorder);
 	if (! empty($arrayfields['f.tms']['checked']))       print_liste_field_titre($arrayfields['f.tms']['label'],$_SERVER["PHP_SELF"],"f.tms","",$param,'align="center" class="nowrap"',$sortfield,$sortorder);
 	if (! empty($arrayfields['f.fk_statut']['checked'])) print_liste_field_titre($arrayfields['f.fk_statut']['label'],$_SERVER["PHP_SELF"],"f.fk_statut,f.paye,f.type,dynamount_payed","",$param,'align="right"',$sortfield,$sortorder);
+	print "<td></td>\n";//machfree
 	print_liste_field_titre($selectedfields, $_SERVER["PHP_SELF"],"",'','','align="center"',$sortfield,$sortorder,'maxwidthsearch ');
 	print "</tr>\n";
 
@@ -1167,7 +1168,55 @@ if ($resql)
 				print "</td>";
 				if (! $i) $totalarray['nbfield']++;
 			}
+			//machfree muestra estado de retraso de facturas
+			if (! empty($arrayfields['f.fk_statut']['checked']))
+            {                          
+                $fecha_inicial = date("Y/m/d", strtotime($obj->datelimite));
+                $fecha_final= date("Y/m/d");
+                 
+                $inicio = strtotime($fecha_inicial);
+                $fin = strtotime($fecha_final);
+                $dif = $fin - $inicio;
+                $diasFalt = (( ( $dif / 60 ) / 60 ) / 24);
+                $diasFalt =  ceil($diasFalt);
 
+           
+                 if($obj->fk_statut!=2){
+                    if($diasFalt <=0){
+                    print '<td align="center" style="background-color:green; color:white;" >';
+                                   
+                    echo '<b title="'.abs($diasFalt).' días para vencimiento" >Dentro del Plazo';
+                           
+                    print "</td>";
+                    }else{
+                    if($diasFalt <=10){
+                    print '<td align="center" style="background-color:orange; color:white;" >';
+                                   
+                    echo '<b title=" '.$diasFalt.' días de vencimiento" >Poco Riesgo';
+                           
+                    print "</td>";
+                    }else{
+                        if($diasFalt <=20){
+                    print '<td align="center" style="background-color:red; color:white;" >';
+                                   
+                    echo ' <b title=" '.$diasFalt.' días de vencimiento" >Riesgo';
+                           
+                    print "</td>";
+                    }else{
+                        if($diasFalt >21){
+                    print '<td align="center" style="background-color:black; color:white;" >';
+                                   
+                    echo '<b title="'.$diasFalt.' días de vencimiento" >Pérdida';
+                           
+                    print "</td>";
+                    }}}}
+
+                }else {
+                print '<td align="right" class="nowrap" >';
+                 print "</td>";
+                }
+                if (! $i) $totalarray['nbfield']++;
+            }
 			// Action column
 			print '<td class="nowrap" align="center">';
 			if ($massactionbutton || $massaction)   // If we are in select mode (massactionbutton defined) or if we have already selected and sent an action ($massaction) defined

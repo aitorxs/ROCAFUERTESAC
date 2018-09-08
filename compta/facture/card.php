@@ -860,6 +860,7 @@ if (empty($reshook))
 				$object->location_incoterms = GETPOST('location_incoterms', 'alpha');
 				$object->multicurrency_code = GETPOST('multicurrency_code', 'alpha');
 				$object->multicurrency_tx   = GETPOST('originmulticurrency_tx', 'int');
+				$object->almacen			= $_POST['almacen'];
 
 				// Proprietes particulieres a facture de remplacement
 				$object->fk_facture_source = $_POST['fac_replacement'];
@@ -912,6 +913,7 @@ if (empty($reshook))
 				$object->location_incoterms = GETPOST('location_incoterms', 'alpha');
 				$object->multicurrency_code = GETPOST('multicurrency_code', 'alpha');
 				$object->multicurrency_tx   = GETPOST('originmulticurrency_tx', 'int');
+				$object->almacen			= $_POST['almacen'];
 
 				// Proprietes particulieres a facture avoir
 				$object->fk_facture_source = $sourceinvoice > 0 ? $sourceinvoice : '';
@@ -1096,6 +1098,8 @@ if (empty($reshook))
 				$object->location_incoterms = GETPOST('location_incoterms', 'alpha');
 				$object->multicurrency_code = GETPOST('multicurrency_code', 'alpha');
 				$object->multicurrency_tx   = GETPOST('originmulticurrency_tx', 'int');
+				$object->almacen      = $_POST['almacen'];				
+				
 
 				// Source facture
 				$object->fac_rec = GETPOST('fac_rec', 'int');
@@ -1146,6 +1150,7 @@ if (empty($reshook))
 				$object->location_incoterms = GETPOST('location_incoterms', 'alpha');
 				$object->multicurrency_code = GETPOST('multicurrency_code', 'alpha');
 				$object->multicurrency_tx   = GETPOST('originmulticurrency_tx', 'int');
+				$object->almacen      = $_POST['almacen'];
 
 				if (GETPOST('type') == Facture::TYPE_SITUATION)
 				{
@@ -1490,15 +1495,7 @@ if (empty($reshook))
 				{   // If some invoice's lines coming from page
 					$id = $object->create($user);
 
-					for ($i = 1; $i <= $NBLINES; $i ++) {
-						if ($_POST['idprod' . $i]) {
-							$product = new Product($db);
-							$product->fetch($_POST['idprod' . $i]);
-							$startday = dol_mktime(12, 0, 0, $_POST['date_start' . $i . 'month'], $_POST['date_start' . $i . 'day'], $_POST['date_start' . $i . 'year']);
-							$endday = dol_mktime(12, 0, 0, $_POST['date_end' . $i . 'month'], $_POST['date_end' . $i . 'day'], $_POST['date_end' . $i . 'year']);
-							$result = $object->addline($product->description, $product->price, $_POST['qty' . $i], $product->tva_tx, $product->localtax1_tx, $product->localtax2_tx, $_POST['idprod' . $i], $_POST['remise_percent' . $i], $startday, $endday, 0, 0, '', $product->price_base_type, $product->price_ttc, $product->type, -1, 0, '', 0, 0, null, 0, '', 0, 100, '', $product->fk_unit);
-						}
-					}
+
 				}
 			}
 		}
@@ -1565,6 +1562,7 @@ if (empty($reshook))
 				$object->mode_reglement_id = GETPOST('mode_reglement_id','int');
 				$object->remise_absolue = GETPOST('remise_absolue','int');
 				$object->remise_percent = GETPOST('remise_percent','int');
+				$object->almacen = GETPOST('almacen','int');
 
 				// Proprietes particulieres a facture de remplacement
 
@@ -3104,13 +3102,17 @@ if ($action == 'create')
 		print '</td></tr>';
 	}
 
-	// Other attributes
+	// Other attributes //machfree muestra $key y $value 
 	$parameters = array('objectsrc' => $objectsrc,'colspan' => ' colspan="2"', 'cols'=>2);
 	$reshook = $hookmanager->executeHooks('formObjectOptions', $parameters, $object, $action); // Note that $action and $object may have been modified by hook
 	print $hookmanager->resPrint;
 	if (empty($reshook)) {
-		print $object->showOptionals($extrafields, 'edit');
+		print $object->showOptionals($extrafields, 'edit'); //machfree muestra $key y $value 
+
 	}
+
+?><script type="text/javascript">function mostrarValor(select) {  select.parentNode.querySelector("input[name=almacen]").value = select.value;}</script> <!--MACHFREE script para copiar el valor del select de almacenes a uan caja de texto-->
+<?php 
 
 	// Template to use by default
 	print '<tr><td>' . $langs->trans('Model') . '</td>';
@@ -3919,7 +3921,7 @@ else if ($id > 0 || ! empty($ref))
 
 	// Other attributes
 	$cols = 2;
-	include DOL_DOCUMENT_ROOT . '/core/tpl/extrafields_view.tpl.php';
+	include DOL_DOCUMENT_ROOT . '/core/tpl/extrafields_view.tpl.php'; //machfree muestra almacen
 
 	print '</table>';
 

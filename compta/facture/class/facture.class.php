@@ -313,6 +313,7 @@ class Facture extends CommonInvoice
 
 			$this->socid 		     = $_facrec->socid;  // Invoice created on same thirdparty than template
 			$this->entity            = $_facrec->entity; // Invoice created in same entity than template
+			$this->almacen            = $_facrec->almacen;
 
 			// Fields coming from GUI (priority on template). TODO Value of template should be used as default value on GUI so we can use here always value from GUI
 			$this->fk_project        = GETPOST('projectid','int') > 0 ? ((int) GETPOST('projectid','int')) : $_facrec->fk_project;
@@ -322,6 +323,8 @@ class Facture extends CommonInvoice
 			$this->cond_reglement_id = GETPOST('cond_reglement_id','int') > 0 ? ((int) GETPOST('cond_reglement_id','int')) : $_facrec->cond_reglement_id;
 			$this->mode_reglement_id = GETPOST('mode_reglement_id','int') > 0 ? ((int) GETPOST('mode_reglement_id','int')) : $_facrec->mode_reglement_id;
 			$this->fk_account        = GETPOST('fk_account') > 0 ? ((int) GETPOST('fk_account')) : $_facrec->fk_account;
+			$this->options_01as        = GETPOST('options_01as') > 0 ? ((int) GETPOST('options_01as')) : $_facrec->options_01as;
+
 
 			// Set here to have this defined for substitution into notes, should be recalculated after adding lines to get same result
 			$this->total_ht          = $_facrec->total_ht;
@@ -463,10 +466,11 @@ class Facture extends CommonInvoice
 		$resql=$this->db->query($sql);
 		if ($resql)
 		{
+			
 			$this->id = $this->db->last_insert_id(MAIN_DB_PREFIX.'facture');
-
+			
 			// Update ref with new one
-			$this->ref='(PROF'.$this->id.')'; //machfree Genera correlativo de factura borrador
+			$this->ref='(FB00'.$this->almacen.'-'.$this->id.')'; //machfree Genera correlativo de factura borrador
 			$sql = 'UPDATE '.MAIN_DB_PREFIX."facture SET facnumber='".$this->db->escape($this->ref)."' WHERE rowid=".$this->id;
 
 			$resql=$this->db->query($sql);
@@ -754,7 +758,7 @@ class Facture extends CommonInvoice
 					// Actions on extra fields
 					if (! $error)
 					{
-					    $result=$this->insertExtraFields();
+					    $result=$this->insertExtraFields(); //machfree inserta los campos adicionales
 					    if ($result < 0) $error++;
 					}
 
