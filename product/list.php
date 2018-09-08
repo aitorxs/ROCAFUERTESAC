@@ -896,14 +896,18 @@ if ($resql)
 				mysql_select_db($database, $conn); 
 
 
-				$q='SELECT DISTINCT p.rowid, cfd.fk_product,cfd.qty as stockpedido, cfd.rowid as IDpedido  , cf.fk_statut as estadopedido, cf.date_livraison as tiempoentrega, cf.ref as cfreferencia FROM llx_product as p LEFT JOIN llx_commande_fournisseurdet as cfd  ON (p.rowid=cfd.fk_product ) LEFT JOIN  llx_commande_fournisseur as cf  ON  (cfd.rowid=cf.rowid) where cfd.fk_product="'.$registro.'" and cf.fk_statut!=5';
-					$sql= mysql_query($q, $conn)or die(mysql_error());
+				$sql='SELECT DISTINCT p.rowid, cfd.fk_product,cfd.qty as stockpedido, cfd.rowid as IDpedido  , cf.fk_statut as estadopedido, cf.date_livraison as tiempoentrega, cf.ref as cfreferencia FROM llx_product as p LEFT JOIN llx_commande_fournisseurdet as cfd  ON (p.rowid=cfd.fk_product ) LEFT JOIN  llx_commande_fournisseur as cf  ON  (cfd.rowid=cf.rowid) where cfd.fk_product="'.$registro.'" and cf.fk_statut!=5';
+
+					$res = $db->query($sql);
+					$obj = $db->fetch_object($res);
+
+					$sq= mysql_query($sql, $conn)or die(mysql_error());
 
 				print '<td align="right">';
 				?>
 					<select name="clientes">
 					<?php
-					while($row = mysql_fetch_array($sql))
+					while($row = mysql_fetch_array($sq))
 					{
 						$fecha_inicial = date("Y/m/d", strtotime($row['tiempoentrega']));
 		                $fecha_final= date("Y/m/d");

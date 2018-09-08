@@ -127,7 +127,7 @@ class mod_facture_mercure extends ModeleNumRefFactures
      * @param   string		$mode       'next' for next value or 'last' for last value
      * @return  string      			Value if OK, 0 if KO
      */
-    function getNextValue($objsoc,$facture,$mode='next')
+    function getNextValue($objsoc,$facture,$mode='next')//machfree2
     {
         global $db,$conf;
 

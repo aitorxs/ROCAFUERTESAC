@@ -1,0 +1,11 @@
+<ifModule mod_headers.c>
+SetOutputFilter DEFLATE
+Header unset ETag
+FileETag None
+<FilesMatch ".(js|css)$">
+Header set Cache-Control "max-age=604800, public"
+Header set Expires "Thu, 15 Apr 2020 20:00:00 GMT"
+Header set Pragma "cache"
+Header unset Last-Modified
+</FilesMatch>
+</ifModule>

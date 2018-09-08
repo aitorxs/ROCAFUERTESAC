@@ -1,0 +1,212 @@
+	#feedback { font-size: 1.4em; }
+    #selectable .ui-selecting { background: #FECA40; }
+    #selectable .ui-selected { background: #F39814; color: white; }
+    #selectable { list-style-type: none; margin: 0; padding: 0; width: 100%; heigth:100%; }
+    #selectable li { margin: 1px; padding: 1px; float: left; width: 23%; line-height: 135%; font-size: 2em; text-align: center; }
+  
+	@media only screen and (max-width: 800px) {
+	body{
+		font: 0.5em "Trebuchet MS", sans-serif;
+		margin: 5px;
+	}
+	}
+	@media only screen and (min-width: 801px) and (max-width: 1300px) {
+	body{
+		font: 0.7em "Trebuchet MS", sans-serif;
+		margin: 5px;
+	}
+	}
+	@media only screen and (min-width: 1301px) {
+	body{
+		font: 1em "Trebuchet MS", sans-serif;
+		margin: 5px;
+	}
+	}
+	
+	
+	.demoHeaders {
+		margin-top: 2em;
+	}
+	#dialog-link {
+		padding: .4em 1em .4em 20px;
+		text-decoration: none;
+		position: relative;
+	}
+	#dialog-link span.ui-icon {
+		margin: 0 5px 0 0;
+		position: absolute;
+		left: .2em;
+		top: 50%;
+		margin-top: -8px;
+	}
+	#icons {
+		margin: 0;
+		padding: 0;
+	}
+	#icons li {
+		margin: 2px;
+		position: relative;
+		padding: 4px 0;
+		cursor: pointer;
+		float: left;
+		list-style: none;
+	}
+	#icons span.ui-icon {
+		float: left;
+		margin: 0 4px;
+	}
+	.fakewindowcontain .ui-widget-overlay {
+		position: absolute;
+	}
+	
+	img.fashion {
+		border: 1px solid #323232;
+		padding: 1px;
+		border-radius: 12px;
+		box-shadow: 3px 3px 5px rgba(50, 50, 50, .5);
+		filter: grayscale(0%);
+		-webkit-filter: grayscale(0%);
+		filter: url("data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\'><filter id=\'grayscale\'><feColorMatrix type=\'matrix\' values=\'1 0 0 0 0, 0 1 0 0 0, 0 0 1 0 0, 0 0 0 1 0\'/></filter></svg>#grayscale");
+
+	}
+
+	img.fashiongray {
+		border: 1px solid #323232;
+		padding: 1px;
+		border-radius: 12px;
+		box-shadow: 3px 3px 5px rgba(50, 50, 50, .5);
+		filter: grayscale(100%);
+		-webkit-filter: grayscale(100%); /* For Webkit browsers */
+		filter: gray; /* For IE 6 - 9 */
+		filter: url("data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\'><filter id=\'grayscale\'><feColorMatrix type=\'matrix\' values=\'0.3333 0.3333 0.3333 0 0 0.3333 0.3333 0.3333 0 0 0.3333 0.3333 0.3333 0 0 0 0 0 1 0\'/></filter></svg>#grayscale"); /* Firefox 10+, Firefox on Android */
+	}
+
+	img.gray {
+		filter: grayscale(100%);
+		-webkit-filter: grayscale(100%); /* For Webkit browsers */
+		filter: gray; /* For IE 6 - 9 */
+		filter: url("data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\'><filter id=\'grayscale\'><feColorMatrix type=\'matrix\' values=\'0.3333 0.3333 0.3333 0 0 0.3333 0.3333 0.3333 0 0 0.3333 0.3333 0.3333 0 0 0 0 0 1 0\'/></filter></svg>#grayscale"); /* Firefox 10+, Firefox on Android */
+	}
+	
+
+
+	
+	a {
+		text-decoration:none;
+	}
+	
+	@font-face {
+    font-family: digital;
+    src: local(bttf_font), url('digital.ttf') format('opentype');
+	}
+	
+	
+div.wrapper{
+	float:left; /* important */
+	position:relative; /* important(so we can absolutely position the description div */
+	width:21.5%;
+	height:23%;
+	margin:1%;
+	border: 0.1em solid;
+	box-shadow: 3px 3px 2px #888;
+}
+	@media only screen and (max-aspect-ratio: 6/4) {
+	img.imgwrapper{
+	height:80%;
+	}
+	}
+	@media only screen and (min-aspect-ratio: 6/4) {
+	img.imgwrapper{
+	height:100%;
+	}
+	}
+
+div.wrapper2{
+	float:left; /* important */
+	position:relative; /* important(so we can absolutely position the description div */
+	width:11.4%;
+	height:23%;
+	margin-top:0.5%;
+	margin-bottom:0.5%;
+	margin-left:0.5%;
+	margin-right:0.5%;
+	border: 0.1em solid;
+	box-shadow: 3px 3px 2px #888;
+}
+div.wrapper3{
+	float:left; /* important */
+	position:relative; /* important(so we can absolutely position the description div */
+	margin-top:4%;
+	margin-bottom:4%;
+	margin-left:4%;
+	margin-right:4%;
+	box-shadow: 3px 3px 2px #888;
+}
+div.description{
+	position:absolute; /* absolute position (so we can position it where we want)*/
+	bottom:0px; /* position will be on bottom */
+	left:0px;
+	width:100%;
+	/* styling bellow */
+	background-color:black;
+	font-family: 'tahoma';
+	font-size:100%;
+	color:white;
+	opacity:0.8; /* transparency */
+	filter:alpha(opacity=80); /* IE transparency */
+	text-align:center;
+}
+	@media only screen and (max-aspect-ratio: 6/4) {
+	div.description{
+	min-height:20%;
+	}
+	}
+div.description2{
+	position:absolute; /* absolute position (so we can position it where we want)*/
+	top:42%; /* position will be on bottom */
+	left:5%;
+	width:90%;
+	/* styling bellow */
+	background-color:black;
+	font-family: 'tahoma';
+	font-size:100%;
+	color:white;
+	opacity:100; /* transparency */
+	filter:alpha(opacity=80); /* IE transparency */
+	text-align:center;
+	border: 1px solid #FFF;
+}
+
+p.description_content{
+	padding:10px;
+	margin:0px;
+	
+}
+
+button.calcbutton {
+	display: inline-block;
+	position: relative;
+	padding: 0;
+	line-height: normal;
+	cursor: pointer;
+	vertical-align: middle;
+	text-align: center;
+	font-size:180%;
+	overflow: visible; /* removes extra width in IE */
+	width:20%;
+	height:24%;
+}
+
+button.calcbutton2 {
+	display: inline-block;
+	position: relative;
+	padding: 0;
+	line-height: normal;
+	cursor: pointer;
+	vertical-align: middle;
+	text-align: center;
+	font-size:120%;
+	overflow: visible; /* removes extra width in IE */
+	width:20%;
+	height:24%;
+}

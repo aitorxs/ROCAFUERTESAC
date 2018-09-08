@@ -428,7 +428,7 @@ class Facture extends CommonInvoice
         $sql.= ", multicurrency_tx";
 		$sql.= ")";
 		$sql.= " VALUES (";
-		$sql.= "'(PROV)'";
+		$sql.= "'(PROV1)'";
 		$sql.= ", ".$this->entity;
 		$sql.= ", ".($this->ref_ext?"'".$this->db->escape($this->ref_ext)."'":"null");
 		$sql.= ", '".$this->db->escape($this->type)."'";
@@ -466,7 +466,7 @@ class Facture extends CommonInvoice
 			$this->id = $this->db->last_insert_id(MAIN_DB_PREFIX.'facture');
 
 			// Update ref with new one
-			$this->ref='(PROV'.$this->id.')';
+			$this->ref='(PROF'.$this->id.')'; //machfree Genera correlativo de factura borrador
 			$sql = 'UPDATE '.MAIN_DB_PREFIX."facture SET facnumber='".$this->db->escape($this->ref)."' WHERE rowid=".$this->id;
 
 			$resql=$this->db->query($sql);
@@ -3252,7 +3252,7 @@ class Facture extends CommonInvoice
 	 *      @param     string		$mode		'next' for next value or 'last' for last value
 	 *      @return    string					free ref or last ref
 	 */
-	function getNextNumRef($soc,$mode='next')
+	function getNextNumRef($soc,$mode='next') //machfree1
 	{
 		global $conf, $langs;
 		$langs->load("bills");
@@ -3311,7 +3311,7 @@ class Facture extends CommonInvoice
 
 			$obj = new $classname();
 			$numref = "";
-			$numref = $obj->getNextValue($soc,$this,$mode);
+			$numref = $obj->getNextValue($soc,$this,$mode);//mercure
 
 			/**
 			 * $numref can be empty in case we ask for the last value because if there is no invoice created with the

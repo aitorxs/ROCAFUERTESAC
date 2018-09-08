@@ -498,36 +498,27 @@ class Orders extends DolibarrApi
     function validate($id, $idwarehouse=0, $notrigger=0)
     {
         if(! DolibarrApiAccess::$user->rights->commande->creer) {
-			throw new RestException(401);
-		}
-        $result = $this->commande->fetch($id);
-        if( ! $result ) {
-            throw new RestException(404, 'Order not found');
+              throw new RestException(401, "Insuffisant rights");
+          }
+        // Check mandatory fields
+        $result = $this->_validate($request_data);
+
+        foreach($request_data as $field => $value) {
+            $this->commande->$field = $value;
+        }
+        /*if (isset($request_data["lines"])) {
+          $lines = array();
+          foreach ($request_data["lines"] as $line) {
+            array_push($lines, (object) $line);
+          }
+          $this->commande->lines = $lines;
+        }*/
+
+        if ($this->commande->create(DolibarrApiAccess::$user) < 0) {
+            throw new RestException(500, "Error creating order", array_merge(array($this->commande->error), $this->commande->errors));
         }
 
-		if( ! DolibarrApi::_checkAccessToResource('commande',$this->commande->id)) {
-			throw new RestException(401, 'Access not allowed for login '.DolibarrApiAccess::$user->login);
-		}
-
-		$result = $this->commande->valid(DolibarrApiAccess::$user, $idwarehouse, $notrigger);
-		if ($result == 0) {
-		    throw new RestException(304, 'Error nothing done. May be object is already validated');
-		}
-		if ($result < 0) {
-		    throw new RestException(500, 'Error when validating Order: '.$this->commande->error);
-		}
-        $result = $this->commande->fetch($id);
-        if( ! $result ) {
-            throw new RestException(404, 'Order not found');
-        }
-
-        if( ! DolibarrApi::_checkAccessToResource('commande',$this->commande->id)) {
-            throw new RestException(401, 'Access not allowed for login '.DolibarrApiAccess::$user->login);
-        }
-
-        $this->commande->fetchObjectLinked();
-
-        return $this->_cleanObjectDatas($this->commande);
+        return $this->commande->id;
     }
 
     /**

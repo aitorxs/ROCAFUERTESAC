@@ -88,7 +88,6 @@ llxHeader1( );
         $formorder = new FormOrder($db);
         $soc = new Societe($db);
         $soc->fetch($object->socid);
-
     ?>
     <?php echo "<img  class='logo'  src='tpl/logo.rocafuerte.png' >"; ?>
     <p class='cliente'>NOMBRE: <?php echo $soc->nom; ?></p> <br>

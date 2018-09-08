@@ -712,7 +712,7 @@ function array2table($data,$tableMarkup=1,$tableoptions='',$troptions='',$tdopti
  * @return 	string						New value (numeric) or error message
  */
 function get_next_value($db,$mask,$table,$field,$where='',$objsoc='',$date='',$mode='next', $bentityon=true, $objuser=null, $forceentity=null)
-{
+{ //machfree3
     global $conf,$user;
 
     if (! is_object($objsoc)) $valueforccc=$objsoc;
@@ -1031,7 +1031,7 @@ function get_next_value($db,$mask,$table,$field,$where='',$objsoc='',$date='',$m
         if ($maskuser) $maskLike = str_replace(dol_string_nospecial('{'.$maskuser.'}'),$maskuser_value,$maskLike);
 
         $ref='';
-        $sql = "SELECT ".$field." as ref";
+        $sql = "SELECT ".$field." as ref1";
         $sql.= " FROM ".MAIN_DB_PREFIX.$table;
         $sql.= " WHERE ".$field." LIKE '".$maskLike."'";
     	$sql.= " AND ".$field." NOT LIKE '%PROV%'";

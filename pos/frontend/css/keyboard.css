@@ -1,0 +1,27 @@
+/* keyboard - jQuery UI Widget */
+.ui-keyboard {
+    background: -webkit-linear-gradient(#444, #555); /* For Safari 5.1 to 6.0 */
+    background: -o-linear-gradient(#444, #555); /* For Opera 11.1 to 12.0 */
+    background: -moz-linear-gradient(#444, #555); /* For Firefox 3.6 to 15 */
+    background: linear-gradient(#444, #555); /* Standard syntax */
+    border: #FFFFFF solid 1px !important;
+    box-shadow: 8px 8px 0 rgba(0, 0, 0, 0.2);padding: .3em; position: absolute; left: 0; top: 0; z-index: 16000; }
+.ui-keyboard-has-focus { z-index: 16001; }
+.ui-keyboard div { font-size: 1.1em; }
+.ui-keyboard-button { font-size:1.3em !important;height: 2em; width: 2em; margin: .1em; cursor: pointer; overflow: hidden; }
+.ui-keyboard-button span { padding: 0; margin: 0; white-space:nowrap; }
+.ui-keyboard-button-endrow { clear: left; }
+.ui-keyboard-widekey { width: 4em; }
+.ui-keyboard-space { width: 15em; text-indent: -999em; }
+.ui-keyboard-preview { text-align: left; margin: 0 0 3px 0; display: inline; } /* width: 100%; now full window width in IE =( */ 
+.ui-keyboard-keyset { text-align: center; }
+.ui-keyboard-input { text-align: left; }
+.ui-keyboard-placeholder { color: #888; }
+.ui-keyboard-nokeyboard { color: #888; border-color: #888; } /* disabled or readonly inputs, or use input[disabled='disabled'] { color: #f00; } */
+
+/* only used in IE to prevent clicking in another input/textarea */
+.ui-keyboard-overlay { height: 100%; width: 100%; background: transparent; position: absolute; top: 0; left: 0; z-index: 15999; }
+.ui-keyboard-overlay-input { position: relative; top: 0; left: 0; zoom: 1; z-index: 16000; } /* put input above overlay if preview is not used - IE only */
+
+/* combo key styling - toggles diacritics on/off */
+.ui-keyboard-button.ui-keyboard-combo.ui-state-default { border-color: #ffaf0f; }

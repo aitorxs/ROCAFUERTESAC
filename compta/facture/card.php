@@ -3419,7 +3419,7 @@ else if ($id > 0 || ! empty($ref))
 				$object->date = dol_now();
 				$object->date_lim_reglement = $object->calculate_date_lim_reglement();
 			}
-			$numref = $object->getNextNumRef($soc);
+			$numref = $object->getNextNumRef($soc);//machfree
 			// $object->date=$savdate;
 		} else {
 			$numref = $object->ref;

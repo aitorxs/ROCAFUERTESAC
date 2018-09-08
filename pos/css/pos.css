@@ -1,0 +1,9 @@
+table tr.impair{
+    background-color: #ffffff !important;
+}
+table tr.pair{
+     background-color: #fafafa !important;
+ }
+table tr.liste_titre{
+    background: rgb(220,220,223) !important;
+}

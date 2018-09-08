@@ -591,6 +591,7 @@ class Proposals extends DolibarrApi
 
         return $this->_cleanObjectDatas($this->propal);
 	}
+	}
 
 	/**
 	 * Close (Accept or refuse) a quote / commercial proposal
