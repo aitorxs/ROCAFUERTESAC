@@ -712,7 +712,7 @@ function array2table($data,$tableMarkup=1,$tableoptions='',$troptions='',$tdopti
  * @return 	string						New value (numeric) or error message
  */
 function get_next_value($db,$mask,$table,$field,$where='',$objsoc='',$date='',$mode='next', $bentityon=true, $objuser=null, $forceentity=null)
-{ //machfree3
+{
     global $conf,$user;
 
     if (! is_object($objsoc)) $valueforccc=$objsoc;

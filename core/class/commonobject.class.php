@@ -6339,7 +6339,7 @@ function printObjectLinespedido($action, $seller, $buyer, $selected=0, $dateSele
 							break;
 					}
 
-					$out .= '<input type="text" name="almacen" id="almacen"/></td>';//machfree se agreago print '<input type="text" name="almacen" id="almacen"/>'; para poder sacar el valor del listado de almacenes.
+					$out .= '<input type="hidden" name="almacen" id="almacen"/></td>';//machfree se agrego print '<input type="text" name="almacen" id="almacen"/>'; para poder sacar el valor del listado de almacenes.
 
 					if (! empty($conf->global->MAIN_EXTRAFIELDS_USE_TWO_COLUMS) && (($e % 2) == 1)) $out .= '</tr>';
 					else $out .= '</tr>';

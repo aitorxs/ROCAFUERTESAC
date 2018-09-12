@@ -313,7 +313,7 @@ class Facture extends CommonInvoice
 
 			$this->socid 		     = $_facrec->socid;  // Invoice created on same thirdparty than template
 			$this->entity            = $_facrec->entity; // Invoice created in same entity than template
-			$this->almacen            = $_facrec->almacen;
+			
 
 			// Fields coming from GUI (priority on template). TODO Value of template should be used as default value on GUI so we can use here always value from GUI
 			$this->fk_project        = GETPOST('projectid','int') > 0 ? ((int) GETPOST('projectid','int')) : $_facrec->fk_project;
@@ -431,7 +431,7 @@ class Facture extends CommonInvoice
         $sql.= ", multicurrency_tx";
 		$sql.= ")";
 		$sql.= " VALUES (";
-		$sql.= "'(PROV1)'";
+		$sql.= "'(PROV)'";
 		$sql.= ", ".$this->entity;
 		$sql.= ", ".($this->ref_ext?"'".$this->db->escape($this->ref_ext)."'":"null");
 		$sql.= ", '".$this->db->escape($this->type)."'";
@@ -470,7 +470,7 @@ class Facture extends CommonInvoice
 			$this->id = $this->db->last_insert_id(MAIN_DB_PREFIX.'facture');
 			
 			// Update ref with new one
-			$this->ref='(FB00'.$this->almacen.'-'.$this->id.')'; //machfree Genera correlativo de factura borrador
+			$this->ref='(PROV'.$this->almacen.'-'.$this->id.')'; //machfree Genera correlativo de factura borrador
 			$sql = 'UPDATE '.MAIN_DB_PREFIX."facture SET facnumber='".$this->db->escape($this->ref)."' WHERE rowid=".$this->id;
 
 			$resql=$this->db->query($sql);
@@ -2166,7 +2166,7 @@ class Facture extends CommonInvoice
 	 * @param	int		$notrigger		1=Does not execute triggers, 0= execute triggers
      * @return	int						<0 if KO, 0=Nothing done because invoice is not a draft, >0 if OK
 	 */
-	function validate($user, $force_number='', $idwarehouse=0, $notrigger=0)
+	function validate($user, $force_number='', $idwarehouse=0, $notrigger=0) //machfree funcion para validar factura de venta
 	{
 		global $conf,$langs;
 		require_once DOL_DOCUMENT_ROOT.'/core/lib/files.lib.php';

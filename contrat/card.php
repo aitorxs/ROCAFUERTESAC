@@ -1353,7 +1353,7 @@ else
 		if ($action == 'valid')
 		{
 			$ref = substr($object->ref, 1, 4);
-			if ($ref == 'PROV' && !empty($modCodeContract->code_auto))
+			if ($ref == 'BF' && !empty($modCodeContract->code_auto))
 			{
 				$numref = $object->getNextNumRef($object->thirdparty);
 			}

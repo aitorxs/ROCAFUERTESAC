@@ -860,7 +860,7 @@ if (empty($reshook))
 				$object->location_incoterms = GETPOST('location_incoterms', 'alpha');
 				$object->multicurrency_code = GETPOST('multicurrency_code', 'alpha');
 				$object->multicurrency_tx   = GETPOST('originmulticurrency_tx', 'int');
-				$object->almacen			= $_POST['almacen'];
+				$object->almacen			= $_POST['almacen']; //machfree
 
 				// Proprietes particulieres a facture de remplacement
 				$object->fk_facture_source = $_POST['fac_replacement'];
@@ -913,7 +913,7 @@ if (empty($reshook))
 				$object->location_incoterms = GETPOST('location_incoterms', 'alpha');
 				$object->multicurrency_code = GETPOST('multicurrency_code', 'alpha');
 				$object->multicurrency_tx   = GETPOST('originmulticurrency_tx', 'int');
-				$object->almacen			= $_POST['almacen'];
+				$object->almacen			= $_POST['almacen']; //machfree
 
 				// Proprietes particulieres a facture avoir
 				$object->fk_facture_source = $sourceinvoice > 0 ? $sourceinvoice : '';
@@ -1098,7 +1098,7 @@ if (empty($reshook))
 				$object->location_incoterms = GETPOST('location_incoterms', 'alpha');
 				$object->multicurrency_code = GETPOST('multicurrency_code', 'alpha');
 				$object->multicurrency_tx   = GETPOST('originmulticurrency_tx', 'int');
-				$object->almacen      = $_POST['almacen'];				
+				$object->almacen      = $_POST['almacen'];				 //machfree
 				
 
 				// Source facture
@@ -1150,7 +1150,7 @@ if (empty($reshook))
 				$object->location_incoterms = GETPOST('location_incoterms', 'alpha');
 				$object->multicurrency_code = GETPOST('multicurrency_code', 'alpha');
 				$object->multicurrency_tx   = GETPOST('originmulticurrency_tx', 'int');
-				$object->almacen      = $_POST['almacen'];
+				$object->almacen      = $_POST['almacen']; //machfree
 
 				if (GETPOST('type') == Facture::TYPE_SITUATION)
 				{
@@ -1562,7 +1562,7 @@ if (empty($reshook))
 				$object->mode_reglement_id = GETPOST('mode_reglement_id','int');
 				$object->remise_absolue = GETPOST('remise_absolue','int');
 				$object->remise_percent = GETPOST('remise_percent','int');
-				$object->almacen = GETPOST('almacen','int');
+				$object->almacen = GETPOST('almacen','int'); //machfree
 
 				// Proprietes particulieres a facture de remplacement
 
@@ -3415,7 +3415,7 @@ else if ($id > 0 || ! empty($ref))
 	{
 		// we check object has a draft number
 		$objectref = substr($object->ref, 1, 4);
-		if ($objectref == 'PROV') {
+		if ($objectref == 'PROV') {//machfree compara si la referencia empieza con esos digitos o letras.
 			$savdate = $object->date;
 			if (! empty($conf->global->FAC_FORCE_DATE_VALIDATION)) {
 				$object->date = dol_now();
@@ -3921,7 +3921,7 @@ else if ($id > 0 || ! empty($ref))
 
 	// Other attributes
 	$cols = 2;
-	include DOL_DOCUMENT_ROOT . '/core/tpl/extrafields_view.tpl.php'; //machfree muestra almacen
+	include DOL_DOCUMENT_ROOT . '/core/tpl/extrafields_view.tpl.php'; //machfree otros atributos
 
 	print '</table>';
 
