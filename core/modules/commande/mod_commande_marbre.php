@@ -30,7 +30,7 @@ require_once DOL_DOCUMENT_ROOT .'/core/modules/commande/modules_commande.php';
 class mod_commande_marbre extends ModeleNumRefCommandes
 {
 	var $version='dolibarr';		// 'development', 'experimental', 'dolibarr'
-	var $prefix='CO';
+	var $prefix='PE';
 	var $error='';
 	var $nom='Marbre';
 
@@ -103,35 +103,113 @@ class mod_commande_marbre extends ModeleNumRefCommandes
 	{
 		global $db,$conf;
 
-		// D'abord on recupere la valeur max
-		$posindice=8;
-		$sql = "SELECT MAX(CAST(SUBSTRING(ref FROM ".$posindice.") AS SIGNED)) as max";
+		$sql = "SELECT rowid ,fk_warehouse as almacen";	// This is standard SQL
 		$sql.= " FROM ".MAIN_DB_PREFIX."commande";
-		$sql.= " WHERE ref LIKE '".$db->escape($this->prefix)."____-%'";
-		$sql.= " AND entity = ".$conf->entity;
-
+		$sql.= " WHERE rowid=".$object->id." ";
 		$resql=$db->query($sql);
-		if ($resql)
-		{
-			$obj = $db->fetch_object($resql);
-			if ($obj) $max = intval($obj->max);
-			else $max=0;
+		$obj = $db->fetch_object($resql);
+		$valorunico= $obj->almacen ;
+
+		
+		if($valorunico <= 1 ){
+			// D'abord on recupere la valeur max
+			$posindice=8;
+			$sql = "SELECT MAX(CAST(SUBSTRING(ref FROM ".$posindice.") AS SIGNED)) as max";
+			$sql.= " FROM ".MAIN_DB_PREFIX."commande";
+			$sql.= " WHERE ref LIKE '".$db->escape($this->prefix).$valorunico."-%'";
+			$sql.= " AND entity = ".$conf->entity;
+
+			$resql=$db->query($sql);
+			if ($resql)
+			{
+				$obj = $db->fetch_object($resql);
+				if ($obj) $max = intval($obj->max);
+				else $max=0;
+			}
+			else
+			{
+				dol_syslog("mod_commande_marbre::getNextValue", LOG_DEBUG);
+				return -1;
+			}
+
+			//$date=time();
+			$date=$object->date;
+			$yymm = strftime("%y%m",$date);
+
+	    	if ($max >= (pow(10, 4) - 1)) $num=$max+1;	// If counter > 9999, we do not format on 4 chars, we take number as it is
+	    	else $num = sprintf("%04s",$max+1);
+
+			dol_syslog("mod_commande_marbre::getNextValue return ".$this->prefix.$valorunico."-".$num);
+			return $this->prefix.$valorunico."-".$num;
+
+		}else{
+			if($valorunico <= 2 ){
+
+				// D'abord on recupere la valeur max
+			$posindice=8;
+			$sql = "SELECT MAX(CAST(SUBSTRING(ref FROM ".$posindice.") AS SIGNED)) as max";
+			$sql.= " FROM ".MAIN_DB_PREFIX."commande";
+			$sql.= " WHERE ref LIKE '".$db->escape($this->prefix).$valorunico."-%'";
+			$sql.= " AND entity = ".$conf->entity;
+
+			$resql=$db->query($sql);
+			if ($resql)
+			{
+				$obj = $db->fetch_object($resql);
+				if ($obj) $max = intval($obj->max);
+				else $max=0;
+			}
+			else
+			{
+				dol_syslog("mod_commande_marbre::getNextValue", LOG_DEBUG);
+				return -1;
+			}
+
+			//$date=time();
+			$date=$object->date;
+			$yymm = strftime("%y%m",$date);
+
+	    	if ($max >= (pow(10, 4) - 1)) $num=$max+1;	// If counter > 9999, we do not format on 4 chars, we take number as it is
+	    	else $num = sprintf("%04s",$max+1);
+
+			dol_syslog("mod_commande_marbre::getNextValue return ".$this->prefix.$valorunico."-".$num);
+			return $this->prefix.$valorunico."-".$num;
+			}else{
+
+
+				// D'abord on recupere la valeur max
+			$posindice=8;
+			$sql = "SELECT MAX(CAST(SUBSTRING(ref FROM ".$posindice.") AS SIGNED)) as max";
+			$sql.= " FROM ".MAIN_DB_PREFIX."commande";
+			$sql.= " WHERE ref LIKE '".$db->escape($this->prefix).$valorunico."-%'";
+			$sql.= " AND entity = ".$conf->entity;
+
+			$resql=$db->query($sql);
+			if ($resql)
+			{
+				$obj = $db->fetch_object($resql);
+				if ($obj) $max = intval($obj->max);
+				else $max=0;
+			}
+			else
+			{
+				dol_syslog("mod_commande_marbre::getNextValue", LOG_DEBUG);
+				return -1;
+			}
+
+			//$date=time();
+			$date=$object->date;
+			$yymm = strftime("%y%m",$date);
+
+	    	if ($max >= (pow(10, 4) - 1)) $num=$max+1;	// If counter > 9999, we do not format on 4 chars, we take number as it is
+	    	else $num = sprintf("%04s",$max+1);
+
+			dol_syslog("mod_commande_marbre::getNextValue return ".$this->prefix.$valorunico."-".$num);
+			return $this->prefix.$valorunico."-".$num;
+			
+			}
+
 		}
-		else
-		{
-			dol_syslog("mod_commande_marbre::getNextValue", LOG_DEBUG);
-			return -1;
-		}
-
-		//$date=time();
-		$date=$object->date;
-		$yymm = strftime("%y%m",$date);
-
-    	if ($max >= (pow(10, 4) - 1)) $num=$max+1;	// If counter > 9999, we do not format on 4 chars, we take number as it is
-    	else $num = sprintf("%04s",$max+1);
-
-		dol_syslog("mod_commande_marbre::getNextValue return ".$this->prefix.$yymm."-".$num);
-		return $this->prefix.$yymm."-".$num;
 	}
 
 

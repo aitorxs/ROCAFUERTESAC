@@ -113,17 +113,208 @@ class FormProduct
                 $sql.= " LEFT JOIN ".MAIN_DB_PREFIX."product_batch as pb on pb.fk_product_stock = ps.rowid AND pb.batch = '".$batch."'";
             }
 		}
-		$sql.= " WHERE e.entity IN (".getEntity('stock').")";
+		$sql.= " WHERE  e.entity IN (".getEntity('stock').") ";
 		if (count($warehouseStatus))
 		{
 			$sql.= " AND e.statut IN (".$this->db->escape(implode(',',$warehouseStatus)).")";
 		}
 		else
 		{
-			$sql.= " AND e.statut = 1";
+			$sql.= " AND e.statut = 1 ";
 		}
 
-		if(!empty($exclude)) $sql.= ' AND e.rowid NOT IN('.$this->db->escape(implode(',', $exclude)).')';
+		if(!empty($exclude)) $sql.= ' AND e.rowid NOT IN('.$this->db->escape(implode(',', $exclude)).') ';
+
+		if ($sumStock && empty($fk_product)) $sql.= " GROUP BY e.rowid, e.ref, e.description, e.fk_parent";
+		$sql.= " ORDER BY e.ref";
+
+		dol_syslog(get_class($this).'::loadWarehouses', LOG_DEBUG);
+		$resql = $this->db->query($sql);
+		if ($resql)
+		{
+			$num = $this->db->num_rows($resql);
+			$i = 0;
+			while ($i < $num)
+			{
+				$obj = $this->db->fetch_object($resql);
+				if ($sumStock) $obj->stock = price2num($obj->stock,5);
+				$this->cache_warehouses[$obj->rowid]['id'] =$obj->rowid;
+				$this->cache_warehouses[$obj->rowid]['label']=$obj->label;
+				$this->cache_warehouses[$obj->rowid]['parent_id']=$obj->fk_parent;
+				$this->cache_warehouses[$obj->rowid]['description'] = $obj->description;
+				$this->cache_warehouses[$obj->rowid]['stock'] = $obj->stock;
+				$i++;
+			}
+
+			// Full label init
+			foreach($this->cache_warehouses as $obj_rowid=>$tab) {
+				$this->cache_warehouses[$obj_rowid]['full_label'] = $this->get_parent_path($tab);
+			}
+
+			return $num;
+		}
+		else
+		{
+			dol_print_error($this->db);
+			return -1;
+		}
+	}
+
+	function loadWarehouses1($fk_product=0, $batch = '', $status='', $valorunico,$sumStock = true, $exclude='')
+	{
+		global $conf, $langs;
+
+		if (empty($fk_product) && count($this->cache_warehouses)) return 0;    // Cache already loaded and we do not want a list with information specific to a product
+
+		if (is_array($exclude))	$excludeGroups = implode("','",$exclude);
+
+		$warehouseStatus = array();
+
+		if (preg_match('/warehouseclosed/', $status))
+		{
+			$warehouseStatus[] = Entrepot::STATUS_CLOSED;
+		}
+		if (preg_match('/warehouseopen/', $status))
+		{
+			$warehouseStatus[] = Entrepot::STATUS_OPEN_ALL;
+		}
+		if (preg_match('/warehouseinternal/', $status))
+		{
+			$warehouseStatus[] = Entrepot::STATUS_OPEN_INTERNAL;
+		}
+
+		$sql = "SELECT e.rowid, e.ref as label, e.description, e.fk_parent";
+		if (!empty($fk_product))
+		{
+			if (!empty($batch))
+			{
+				$sql.= ", pb.qty as stock";
+			}
+			else
+			{
+				$sql.= ", ps.reel as stock";
+			}
+		}
+		else if ($sumStock)
+		{
+			$sql.= ", sum(ps.reel) as stock";
+		}
+		$sql.= " FROM ".MAIN_DB_PREFIX."entrepot as e";
+		$sql.= " LEFT JOIN ".MAIN_DB_PREFIX."product_stock as ps on ps.fk_entrepot = e.rowid";
+		if (!empty($fk_product))
+		{
+			$sql.= " AND ps.fk_product = '".$fk_product."'";
+			if (!empty($batch))
+            {
+                $sql.= " LEFT JOIN ".MAIN_DB_PREFIX."product_batch as pb on pb.fk_product_stock = ps.rowid AND pb.batch = '".$batch."'";
+            }
+		}
+		$sql.= " WHERE  e.rowid='".$valorunico."'  and e.entity IN (".getEntity('stock').") ";
+		if (count($warehouseStatus))
+		{
+			$sql.= " AND e.statut IN (".$this->db->escape(implode(',',$warehouseStatus)).")";
+		}
+		else
+		{
+			$sql.= " AND e.statut = 1 ";
+		}
+
+		if(!empty($exclude)) $sql.= ' AND e.rowid NOT IN('.$this->db->escape(implode(',', $exclude)).') ';
+
+		if ($sumStock && empty($fk_product)) $sql.= " GROUP BY e.rowid, e.ref, e.description, e.fk_parent";
+		$sql.= " ORDER BY e.ref";
+
+		dol_syslog(get_class($this).'::loadWarehouses', LOG_DEBUG);
+		$resql = $this->db->query($sql);
+		if ($resql)
+		{
+			$num = $this->db->num_rows($resql);
+			$i = 0;
+			while ($i < $num)
+			{
+				$obj = $this->db->fetch_object($resql);
+				if ($sumStock) $obj->stock = price2num($obj->stock,5);
+				$this->cache_warehouses[$obj->rowid]['id'] =$obj->rowid;
+				$this->cache_warehouses[$obj->rowid]['label']=$obj->label;
+				$this->cache_warehouses[$obj->rowid]['parent_id']=$obj->fk_parent;
+				$this->cache_warehouses[$obj->rowid]['description'] = $obj->description;
+				$this->cache_warehouses[$obj->rowid]['stock'] = $obj->stock;
+				$i++;
+			}
+
+			// Full label init
+			foreach($this->cache_warehouses as $obj_rowid=>$tab) {
+				$this->cache_warehouses[$obj_rowid]['full_label'] = $this->get_parent_path($tab);
+			}
+
+			return $num;
+		}
+		else
+		{
+			dol_print_error($this->db);
+			return -1;
+		}
+	}
+function loadWarehouses2($fk_product=0, $batch = '', $status='', $valorunico,$sumStock = true, $exclude='')
+	{
+		global $conf, $langs;
+
+		if (empty($fk_product) && count($this->cache_warehouses)) return 0;    // Cache already loaded and we do not want a list with information specific to a product
+
+		if (is_array($exclude))	$excludeGroups = implode("','",$exclude);
+
+		$warehouseStatus = array();
+
+		if (preg_match('/warehouseclosed/', $status))
+		{
+			$warehouseStatus[] = Entrepot::STATUS_CLOSED;
+		}
+		if (preg_match('/warehouseopen/', $status))
+		{
+			$warehouseStatus[] = Entrepot::STATUS_OPEN_ALL;
+		}
+		if (preg_match('/warehouseinternal/', $status))
+		{
+			$warehouseStatus[] = Entrepot::STATUS_OPEN_INTERNAL;
+		}
+
+		$sql = "SELECT e.rowid, e.ref as label, e.description, e.fk_parent";
+		if (!empty($fk_product))
+		{
+			if (!empty($batch))
+			{
+				$sql.= ", pb.qty as stock";
+			}
+			else
+			{
+				$sql.= ", ps.reel as stock";
+			}
+		}
+		else if ($sumStock)
+		{
+			$sql.= ", sum(ps.reel) as stock";
+		}
+		$sql.= " FROM ".MAIN_DB_PREFIX."entrepot as e";
+		$sql.= " LEFT JOIN ".MAIN_DB_PREFIX."product_stock as ps on ps.fk_entrepot = e.rowid";
+		if (!empty($fk_product))
+		{
+			$sql.= " AND ps.fk_product = '".$fk_product."'";
+			if (!empty($batch))
+            {
+                $sql.= " LEFT JOIN ".MAIN_DB_PREFIX."product_batch as pb on pb.fk_product_stock = ps.rowid AND pb.batch = '".$batch."'";
+            }
+		}
+		$sql.= " WHERE  e.rowid='".$valorunico."'  and e.entity IN (".getEntity('stock').") ";
+		if (count($warehouseStatus))
+		{
+			$sql.= " AND e.statut IN (".$this->db->escape(implode(',',$warehouseStatus)).")";
+		}
+		else
+		{
+			$sql.= " AND e.statut = 1 ";
+		}
+
+		if(!empty($exclude)) $sql.= ' AND e.rowid NOT IN('.$this->db->escape(implode(',', $exclude)).') ';
 
 		if ($sumStock && empty($fk_product)) $sql.= " GROUP BY e.rowid, e.ref, e.description, e.fk_parent";
 		$sql.= " ORDER BY e.ref";
@@ -223,7 +414,7 @@ class FormProduct
 		}
 
 		$out.='<select class="flat'.($morecss?' '.$morecss:'').'"'.($disabled?' disabled':'').' id="'.$htmlname.'" name="'.($htmlname.($disabled?'_disabled':'')).'">';
-		if ($empty) $out.='<option value="-1">'.($empty_label?$empty_label:'&nbsp;').'</option>';
+		if ($empty) // MACHFREE $out.='<option value="-1">'.($empty_label?$empty_label:'&nbsp;ggghj').'</option>'; se comento esta linea para quitar el espacio vacio del select
 		foreach($this->cache_warehouses as $id => $arraytypes)
 		{
 			$out.='<option value="'.$id.'"';
@@ -240,6 +431,77 @@ class FormProduct
 		return $out;
 	}
 
+	function selectWarehouses1($selected='',$htmlname='idwarehouse',$filterstatus='',$empty=0,$disabled=0,$fk_product=0,$empty_label='', $showstock=0, $forcecombo=0,$valorunico, $events=array(), $morecss='minwidth200', $exclude='', $showfullpath=1)
+	{
+		global $conf,$langs,$user;
+		
+		dol_syslog(get_class($this)."::selectWarehouses $selected, $htmlname, $filterstatus, $empty, $disabled, $fk_product, $empty_label, $showstock, $forcecombo, $morecss",LOG_DEBUG);
+
+		$out='';
+		if (empty($conf->global->ENTREPOT_EXTRA_STATUS)) $filterstatus = '';
+		$this->loadWarehouses1($fk_product, '', $filterstatus,$valorunico, true, $exclude);
+		$nbofwarehouses=count($this->cache_warehouses);
+
+		if ($conf->use_javascript_ajax && ! $forcecombo)
+		{
+			include_once DOL_DOCUMENT_ROOT . '/core/lib/ajax.lib.php';
+			$comboenhancement = ajax_combobox($htmlname, $events);
+			$out.= $comboenhancement;
+		}
+
+		$out.='<select class="flat'.($morecss?' '.$morecss:'').'"'.($disabled?' disabled':'').' id="'.$htmlname.'" name="'.($htmlname.($disabled?'_disabled':'')).'">';
+		if ($empty) 
+		foreach($this->cache_warehouses as $id => $arraytypes)
+		{
+			$out.='<option value="'.$id.'"';
+			if ($selected == $id || ($selected == 'ifone' && $nbofwarehouses == 1)) $out.=' selected';
+			$out.='>';
+			if ($showfullpath) $out.=$arraytypes['full_label'];
+			else $out.=$arraytypes['label'];
+			if (($fk_product || ($showstock > 0)) && ($arraytypes['stock'] != 0 || ($showstock > 0))) $out.=' ('.$langs->trans("Stock").':'.$arraytypes['stock'].')';
+			$out.='</option>';
+		}
+		$out.='</select>';
+		if ($disabled) $out.='<input type="hidden" name="'.$htmlname.'" value="'.(($selected>0)?$selected:'').'">';
+
+		return $out;
+	}
+
+	function selectWarehouses2($selected='',$htmlname='idwarehouse',$filterstatus='',$empty=0,$disabled=0,$fk_product=0,$empty_label='', $showstock=0, $forcecombo=0,$valorunico, $events=array(), $morecss='minwidth200', $exclude='', $showfullpath=1)
+	{
+		global $conf,$langs,$user;
+		
+		dol_syslog(get_class($this)."::selectWarehouses $selected, $htmlname, $filterstatus, $empty, $disabled, $fk_product, $empty_label, $showstock, $forcecombo, $morecss",LOG_DEBUG);
+
+		$out='';
+		if (empty($conf->global->ENTREPOT_EXTRA_STATUS)) $filterstatus = '';
+		$this->loadWarehouses2($fk_product, '', $filterstatus,$valorunico, true, $exclude);
+		$nbofwarehouses=count($this->cache_warehouses);
+
+		if ($conf->use_javascript_ajax && ! $forcecombo)
+		{
+			include_once DOL_DOCUMENT_ROOT . '/core/lib/ajax.lib.php';
+			$comboenhancement = ajax_combobox($htmlname, $events);
+			$out.= $comboenhancement;
+		}
+
+		$out.='<select class="flat'.($morecss?' '.$morecss:'').'"'.($disabled?' disabled':'').' id="'.$htmlname.'" name="'.($htmlname.($disabled?'_disabled':'')).'">';
+		if ($empty) 
+		foreach($this->cache_warehouses as $id => $arraytypes)
+		{
+			$out.='<option value="'.$id.'"';
+			if ($selected == $id || ($selected == 'ifone' && $nbofwarehouses == 1)) $out.=' selected';
+			$out.='>';
+			if ($showfullpath) $out.=$arraytypes['full_label'];
+			else $out.=$arraytypes['label'];
+			if (($fk_product || ($showstock > 0)) && ($arraytypes['stock'] != 0 || ($showstock > 0))) $out.=' ('.$langs->trans("Stock").':'.$arraytypes['stock'].')';
+			$out.='</option>';
+		}
+		$out.='</select>';
+		if ($disabled) $out.='<input type="hidden" name="'.$htmlname.'" value="'.(($selected>0)?$selected:'').'">';
+
+		return $out;
+	}
     /**
      *    Display form to select warehouse
      *

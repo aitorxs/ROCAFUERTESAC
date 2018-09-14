@@ -1620,19 +1620,19 @@ if ($action == 'create' && $user->rights->commande->creer)
 		print '</td></tr>';
 	}
 
-	// Warehouse
-	if (! empty($conf->expedition->enabled) && ! empty($conf->global->WAREHOUSE_ASK_WAREHOUSE_DURING_ORDER)) {
+	// Warehouse  MACHFREE CREACION DE PEDIDO
+	if (/*! empty($conf->expedition->enabled) &&*/ ! empty($conf->global->WAREHOUSE_ASK_WAREHOUSE_DURING_ORDER)) {
 		require_once DOL_DOCUMENT_ROOT.'/product/class/html.formproduct.class.php';
 		$formproduct=new FormProduct($db);
-		print '<tr><td>' . $langs->trans('Warehouse') . '</td><td>';
-		print $formproduct->selectWarehouses($warehouse_id, 'warehouse_id', '', 1);
+		print '<tr><td class="fieldrequired">Sucursal</td><td>';
+		print $formproduct->selectWarehouses($warehouse_id, 'warehouse_id', '', 1,'');//machfree agregar '' 
 		print '</td></tr>';
 	}
 
 	// What trigger creation
-	print '<tr><td>' . $langs->trans('Channel') . '</td><td>';
-	$form->selectInputReason($demand_reason_id, 'demand_reason_id', '', 1);
-	print '</td></tr>';
+	//print '<tr><td>' . $langs->trans('Channel') . '</td><td>';
+	//$form->selectInputReason($demand_reason_id, 'demand_reason_id', '', 1);
+	//print '</td></tr>';
 
 	// TODO How record was recorded OrderMode (llx_c_input_method)
 
@@ -1860,11 +1860,12 @@ if ($action == 'create' && $user->rights->commande->creer)
 				$formproduct = new FormProduct($db);
 				$forcecombo=0;
 				if ($conf->browser->name == 'ie') $forcecombo = 1;	// There is a bug in IE10 that make combo inside popup crazy
+				$valorunico=$object->warehouse_id;
 				$formquestion = array(
 					// 'text' => $langs->trans("ConfirmClone"),
 					// array('type' => 'checkbox', 'name' => 'clone_content', 'label' => $langs->trans("CloneMainAttributes"), 'value' => 1),
 					// array('type' => 'checkbox', 'name' => 'update_prices', 'label' => $langs->trans("PuttingPricesUpToDate"), 'value' => 1),
-					array('type' => 'other','name' => 'idwarehouse','label' => $langs->trans("SelectWarehouseForStockDecrease"),'value' => $formproduct->selectWarehouses(GETPOST('idwarehouse','int')?GETPOST('idwarehouse','int'):'ifone', 'idwarehouse', '', 1, 0, 0, '', 0, $forcecombo))
+					array('type' => 'other','name' => 'idwarehouse','label' => $langs->trans("SelectWarehouseForStockDecrease"),'value' => $formproduct->selectWarehouses1(GETPOST('idwarehouse','int')?GETPOST('idwarehouse','int'):'ifone', 'idwarehouse', '', 1, 0, 0, '', 0, $forcecombo ,$valorunico))
 				);
 			}
 
@@ -1892,12 +1893,13 @@ if ($action == 'create' && $user->rights->commande->creer)
 				require_once DOL_DOCUMENT_ROOT . '/product/class/html.formproduct.class.php';
 				$formproduct = new FormProduct($db);
 				$forcecombo=0;
+				$valorunico=$object->warehouse_id;
 				if ($conf->browser->name == 'ie') $forcecombo = 1;	// There is a bug in IE10 that make combo inside popup crazy
 				$formquestion = array(
 					// 'text' => $langs->trans("ConfirmClone"),
 					// array('type' => 'checkbox', 'name' => 'clone_content', 'label' => $langs->trans("CloneMainAttributes"), 'value' => 1),
 					// array('type' => 'checkbox', 'name' => 'update_prices', 'label' => $langs->trans("PuttingPricesUpToDate"), 'value' => 1),
-					array('type' => 'other','name' => 'idwarehouse','label' => $langs->trans("SelectWarehouseForStockIncrease"),'value' => $formproduct->selectWarehouses(GETPOST('idwarehouse')?GETPOST('idwarehouse'):'ifone', 'idwarehouse', '', 1, 0, 0, '', 0, $forcecombo))
+					array('type' => 'other','name' => 'idwarehouse','label' => $langs->trans("SelectWarehouseForStockIncrease"),'value' => $formproduct->selectWarehouses2(GETPOST('idwarehouse')?GETPOST('idwarehouse'):'ifone', 'idwarehouse', '', 1, 0, 0, '', 0, $forcecombo,$valorunico))
 				);
 			}
 
@@ -1952,18 +1954,7 @@ if ($action == 'create' && $user->rights->commande->creer)
 			$formconfirm=$form->formconfirm($_SERVER["PHP_SELF"].'?id='.$object->id.'&lineid='.$lineid, $langs->trans('DeleteProductLine'), $langs->trans('ConfirmDeleteProductLine'), 'confirm_deleteline', '', 0, 1);
 		}
 
-		// Clone confirmation
-		if ($action == 'clone') {
-			// Create an array for form
-			$formquestion = array(
-								// 'text' => $langs->trans("ConfirmClone"),
-								// array('type' => 'checkbox', 'name' => 'clone_content', 'label' => $langs->trans("CloneMainAttributes"), 'value' =>
-								// 1),
-								// array('type' => 'checkbox', 'name' => 'update_prices', 'label' => $langs->trans("PuttingPricesUpToDate"), 'value'
-								// => 1),
-								array('type' => 'other','name' => 'socid','label' => $langs->trans("SelectThirdParty"),'value' => $form->select_company(GETPOST('socid', 'int'), 'socid', '(s.client=1 OR s.client=3)')));
-			$formconfirm = $form->formconfirm($_SERVER["PHP_SELF"] . '?id=' . $object->id, $langs->trans('CloneOrder'), $langs->trans('ConfirmCloneOrder', $object->ref), 'confirm_clone', $formquestion, 'yes', 1);
-		}
+
 
 		if (! $formconfirm) {
 			$parameters = array('lineid' => $lineid);
@@ -2141,16 +2132,14 @@ if ($action == 'create' && $user->rights->commande->creer)
 			print '</tr>';
 		}
 
-		// Warehouse
-		if (! empty($conf->expedition->enabled) && ! empty($conf->global->WAREHOUSE_ASK_WAREHOUSE_DURING_ORDER)) {
+		// Warehouse  MACHFREE edicion de pedido
+		if (/*! empty($conf->expedition->enabled) &&*/ ! empty($conf->global->WAREHOUSE_ASK_WAREHOUSE_DURING_ORDER)) {
 			require_once DOL_DOCUMENT_ROOT.'/product/class/html.formproduct.class.php';
 			$formproduct=new FormProduct($db);
 			print '<tr><td>';
-			print '<table width="100%" class="nobordernopadding"><tr><td>';
-			print $langs->trans('Warehouse');
-			print '</td>';
+			print '<table width="100%" class="nobordernopadding"><tr><td>Sucursal</td>';
 			if ($action != 'editwarehouse' && $user->rights->commande->creer)
-				print '<td align="right"><a href="'.$_SERVER["PHP_SELF"].'?action=editwarehouse&amp;id='.$object->id.'">'.img_edit($langs->trans('SetWarehouse'),1).'</a></td>';
+				print '<td align="right"><a href="'.$_SERVER["PHP_SELF"].'?action=editwarehouse&amp;id='.$object->id.'">'.img_edit($langs->trans('Selecionar Sucursal'),1).'</a></td>';
 			print '</tr></table>';
 			print '</td><td>';
 			if ($action == 'editwarehouse') {
@@ -2504,7 +2493,14 @@ if ($action == 'create' && $user->rights->commande->creer)
 						print '<div class="inline-block divButAction"><a class="butActionRefused" href="#">' . $langs->trans('SendMail') . '</a></div>';
 				}
 
-				//MACHFREE
+				// Valid
+				if ($object->statut == Commande::STATUS_DRAFT && $object->total_ttc >= 0 && $numlines > 0 &&
+					((empty($conf->global->MAIN_USE_ADVANCED_PERMS) && ! empty($user->rights->commande->creer))
+				   	|| (! empty($conf->global->MAIN_USE_ADVANCED_PERMS) && ! empty($user->rights->commande->order_advance->validate)))
+				)
+				{
+					print '<div class="inline-block divButAction"><a class="butAction" href="' . $_SERVER["PHP_SELF"] . '?id=' . $object->id . '&amp;action=validate">' . $langs->trans('Validate') . '</a></div>';
+					//MACHFREE
 
 				?>
 				<link REL="stylesheet" href="../commande/tpl/style.modal.css" type="text/css" />
@@ -2519,15 +2515,7 @@ if ($action == 'create' && $user->rights->commande->creer)
        			><a class="butAction" >Imprimir</a></div>
    		 
 
-			<?php
-
-				// Valid
-				if ($object->statut == Commande::STATUS_DRAFT && $object->total_ttc >= 0 && $numlines > 0 &&
-					((empty($conf->global->MAIN_USE_ADVANCED_PERMS) && ! empty($user->rights->commande->creer))
-				   	|| (! empty($conf->global->MAIN_USE_ADVANCED_PERMS) && ! empty($user->rights->commande->order_advance->validate)))
-				)
-				{
-					print '<div class="inline-block divButAction"><a class="butAction" href="' . $_SERVER["PHP_SELF"] . '?id=' . $object->id . '&amp;action=validate">' . $langs->trans('Validate') . '</a></div>';
+				<?php
 				}
 				// Edit
 				if ($object->statut == Commande::STATUS_VALIDATED && $user->rights->commande->creer) {

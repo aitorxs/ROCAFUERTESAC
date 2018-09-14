@@ -2010,7 +2010,7 @@ abstract class CommonObject
 		dol_syslog(get_class($this).'::setWarehouse('.$warehouse_id.')');
 
 		$sql = "UPDATE ".MAIN_DB_PREFIX.$this->table_element;
-		$sql.= " SET fk_warehouse = ".$warehouse_id;
+		$sql.= " SET fk_warehouse = ".$warehouse_id.", ref='(PROV".$warehouse_id."-".$this->id.")'" ;//machfre
 		$sql.= " WHERE rowid=".$this->id;
 
 		if ($this->db->query($sql)) {

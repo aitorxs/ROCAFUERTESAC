@@ -89,7 +89,7 @@ class mod_facture_mars extends ModeleNumRefFactures
 		$posindice=8;
 		$sql = "SELECT MAX(CAST(SUBSTRING(facnumber FROM ".$posindice.") AS SIGNED) as max";	// This is standard SQL
 		$sql.= " FROM ".MAIN_DB_PREFIX."facture";
-		$sql.= " WHERE facnumber LIKE '".$db->escape($this->prefixinvoice)."____-%'";
+		$sql.= " WHERE facnumber LIKE '".$db->escape($this->prefixinvoice)."___-%'";
 		$sql.= " AND entity = ".$conf->entity;
 
 		$resql=$db->query($sql);
@@ -154,7 +154,6 @@ class mod_facture_mars extends ModeleNumRefFactures
 		$sql.= " WHERE f.rowid = fe.fk_object and  fe.fk_object=".$facture->id." ";
 		$resql=$db->query($sql);
 		$obj = $db->fetch_object($resql);
-	
 		$valorunico= $obj->almacen ;
 
 		if($valorunico <= 1 ){
@@ -187,7 +186,7 @@ class mod_facture_mars extends ModeleNumRefFactures
 	            $ref='';
 	            $sql = "SELECT facnumber as ref";
 	            $sql.= " FROM ".MAIN_DB_PREFIX."facture";
-	            $sql.= " WHERE facnumber LIKE '".$prefix.$valorunico."____-".$num."'";
+	            $sql.= " WHERE facnumber LIKE '".$prefix.$valorunico."-".$num."'";
 	            $sql.= " AND entity IN (".getEntity('invoicenumber').")";
 
 	            dol_syslog(get_class($this)."::getNextValue", LOG_DEBUG);
@@ -246,7 +245,7 @@ class mod_facture_mars extends ModeleNumRefFactures
 	            $ref='';
 	            $sql = "SELECT facnumber as ref";
 	            $sql.= " FROM ".MAIN_DB_PREFIX."facture";
-	            $sql.= " WHERE facnumber LIKE '".$prefix.$valorunico."____-".$num."'";
+	            $sql.= " WHERE facnumber LIKE '".$prefix.$valorunico."-".$num."'";
 	            $sql.= " AND entity IN (".getEntity('invoicenumber').")";
 
 	            dol_syslog(get_class($this)."::getNextValue", LOG_DEBUG);

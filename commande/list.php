@@ -98,7 +98,7 @@ if (empty($page) || $page == -1 || !empty($search_btn) || !empty($search_remove_
 $offset = $limit * $page;
 $pageprev = $page - 1;
 $pagenext = $page + 1;
-if (! $sortfield) $sortfield='c.ref';
+if (! $sortfield) $sortfield='c.rowid';// machfree se cambio c.ref por c.rowid para ordenar por rowid de pedido.
 if (! $sortorder) $sortorder='DESC';
 
 // Initialize technical object to manage hooks of page. Note that conf->hooks_modules contains array of hook context
@@ -242,8 +242,8 @@ $sql.= " typent.code as typent_code,";
 $sql.= " state.code_departement as state_code, state.nom as state_name,";
 $sql.= ' c.rowid, c.ref, c.total_ht, c.tva as total_tva, c.total_ttc, c.ref_client,';
 $sql.= ' c.date_valid, c.date_commande, c.note_private, c.date_livraison as date_delivery, c.fk_statut, c.facture as billed,';
-$sql.= ' c.date_creation as date_creation, c.tms as date_update,';
-$sql.= " p.rowid as project_id, p.ref as project_ref";
+$sql.= ' c.date_creation as date_creation, c.tms as date_update, c.fk_warehouse,';//machfree
+$sql.= " p.rowid as project_id, p.ref as project_ref, e.rowid, e.ref as sucursal";//machfree
 if ($search_categ_cus) $sql .= ", cc.fk_categorie, cc.fk_soc";
 
 // Add fields from extrafields
@@ -257,7 +257,9 @@ $sql.= " LEFT JOIN ".MAIN_DB_PREFIX."c_country as country on (country.rowid = s.
 $sql.= " LEFT JOIN ".MAIN_DB_PREFIX."c_typent as typent on (typent.id = s.fk_typent)";
 $sql.= " LEFT JOIN ".MAIN_DB_PREFIX."c_departements as state on (state.rowid = s.fk_departement)";
 if (! empty($search_categ_cus)) $sql.= ' LEFT JOIN '.MAIN_DB_PREFIX."categorie_societe as cc ON s.rowid = cc.fk_soc"; // We'll need this table joined to the select in order to filter by categ
+
 $sql.= ', '.MAIN_DB_PREFIX.'commande as c';
+
 if (is_array($extrafields->attribute_label) && count($extrafields->attribute_label)) $sql.= " LEFT JOIN ".MAIN_DB_PREFIX."commande_extrafields as ef on (c.rowid = ef.fk_object)";
 if ($sall || $search_product_category > 0) $sql.= ' LEFT JOIN '.MAIN_DB_PREFIX.'commandedet as pd ON c.rowid=pd.fk_commande';
 if ($search_product_category > 0) $sql.= ' LEFT JOIN '.MAIN_DB_PREFIX.'categorie_product as cp ON cp.fk_product=pd.fk_product';
@@ -265,11 +267,12 @@ $sql.= " LEFT JOIN ".MAIN_DB_PREFIX."projet as p ON p.rowid = c.fk_projet";
 // We'll need this table joined to the select in order to filter by sale
 if ($search_sale > 0 || (! $user->rights->societe->client->voir && ! $socid)) $sql .= ", ".MAIN_DB_PREFIX."societe_commerciaux as sc";
 if ($search_user > 0)
-{
+{		
 	$sql.=", ".MAIN_DB_PREFIX."element_contact as ec";
 	$sql.=", ".MAIN_DB_PREFIX."c_type_contact as tc";
 }
-$sql.= ' WHERE c.fk_soc = s.rowid';
+$sql.= ', '.MAIN_DB_PREFIX.'entrepot as e';//machfree
+$sql.= ' WHERE c.fk_soc = s.rowid and c.fk_warehouse = e.rowid '; //machfree
 $sql.= ' AND c.entity IN ('.getEntity('commande').')';
 if ($search_product_category > 0) $sql.=" AND cp.fk_categorie = ".$search_product_category;
 if ($socid > 0) $sql.= ' AND s.rowid = '.$socid;
@@ -657,7 +660,12 @@ if ($resql)
 		$formother->select_year($search_deliveryyear?$search_deliveryyear:-1,'search_deliveryyear',1, 20, 5);
 		print '</td>';
 	}
-	if (! empty($arrayfields['c.total_ht']['checked']))
+
+		// surcursal machfree
+		print '<td class="liste_titre" align="right">';
+		print '</td>';
+
+		if (! empty($arrayfields['c.total_ht']['checked']))
 	{
 		// Amount
 		print '<td class="liste_titre" align="right">';
@@ -739,6 +747,7 @@ if ($resql)
 	if (! empty($arrayfields['typent.code']['checked']))      print_liste_field_titre($arrayfields['typent.code']['label'],$_SERVER["PHP_SELF"],"typent.code","",$param,'align="center"',$sortfield,$sortorder);
 	if (! empty($arrayfields['c.date_commande']['checked']))  print_liste_field_titre($arrayfields['c.date_commande']['label'],$_SERVER["PHP_SELF"],'c.date_commande','',$param, 'align="center"',$sortfield,$sortorder);
 	if (! empty($arrayfields['c.date_delivery']['checked']))  print_liste_field_titre($arrayfields['c.date_delivery']['label'],$_SERVER["PHP_SELF"],'c.date_livraison','',$param, 'align="center"',$sortfield,$sortorder);
+     print_liste_field_titre('Sucursal',$_SERVER["PHP_SELF"],'e.ref','',$param, 'align="right"',$sortfield,$sortorder); //sucursal machfree
 	if (! empty($arrayfields['c.total_ht']['checked']))       print_liste_field_titre($arrayfields['c.total_ht']['label'],$_SERVER["PHP_SELF"],'c.total_ht','',$param, 'align="right"',$sortfield,$sortorder);
 	if (! empty($arrayfields['c.total_vat']['checked']))      print_liste_field_titre($arrayfields['c.total_vat']['label'],$_SERVER["PHP_SELF"],'c.tva','',$param, 'align="right"',$sortfield,$sortorder);
 	if (! empty($arrayfields['c.total_ttc']['checked']))      print_liste_field_titre($arrayfields['c.total_ttc']['label'],$_SERVER["PHP_SELF"],'c.total_ttc','',$param, 'align="right"',$sortfield,$sortorder);
@@ -1030,6 +1039,12 @@ if ($resql)
 			print '</td>';
 			if (! $i) $totalarray['nbfield']++;
 		}
+		// sucursal machfree
+			print '<td align="center">';
+			print $obj->sucursal;
+			print '</td>';
+			if (! $i) $totalarray['nbfield']++;
+		
 		// Amount HT
 		if (! empty($arrayfields['c.total_ht']['checked']))
 		{

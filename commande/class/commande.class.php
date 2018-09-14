@@ -880,7 +880,7 @@ class Commande extends CommonOrder
                 }
 
                 // update ref
-                $initialref='(PROV'.$this->id.')';
+                $initialref='(PROV'.$this->warehouse_id.'-'.$this->id.')'; //machfree
                 if (! empty($this->ref)) $initialref=$this->ref;
 
                 $sql = 'UPDATE '.MAIN_DB_PREFIX."commande SET ref='".$this->db->escape($initialref)."' WHERE rowid=".$this->id;
