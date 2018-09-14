@@ -138,7 +138,7 @@ function getMarginInfos($pvht, $remise_percent, $tva_tx, $localtax1_tx, $localta
 	// Calculate selling unit price including line discount
 	// We don't use calculate_price, because this function is dedicated to calculation of total with accuracy of total. We need an accuracy of a unit price.
 	// Also we must not apply rounding on non decimal rule defined by option MAIN_ROUNDING_RULE_TOT
-	$pu_ht_remise = $pvht * (1 - ($remise_percent / 100));
+	$pu_ht_remise = $pvht  * (1 - ($remise_percent / 100));
 	$pu_ht_remise = price2num($pu_ht_remise, 'MU');
 
 	// calcul marge

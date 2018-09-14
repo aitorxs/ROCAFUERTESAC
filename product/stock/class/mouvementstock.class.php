@@ -319,7 +319,7 @@ class MouvementStock extends CommonObject
     		    }
     		}
 		}
-
+		$oldqty=$product->stock_reel;//machfree
 		if ($movestock && $entrepot_id > 0)	// Change stock for current product, change for subproduct is done after
 		{
 			if(!empty($this->origin)) {			// This is set by caller for tracking reason
@@ -332,7 +332,7 @@ class MouvementStock extends CommonObject
 
 			$sql = "INSERT INTO ".MAIN_DB_PREFIX."stock_mouvement(";
 			$sql.= " datem, fk_product, batch, eatby, sellby,";
-			$sql.= " fk_entrepot, value, type_mouvement, fk_user_author, label, inventorycode, price, fk_origin, origintype";
+			$sql.= " fk_entrepot, value, type_mouvement, fk_user_author, label, inventorycode, price, fk_origin, origintype ,stock_ant";
 			$sql.= ")";
 			$sql.= " VALUES ('".$this->db->idate($now)."', ".$this->product_id.", ";
 			$sql.= " ".($batch?"'".$batch."'":"null").", ";
@@ -344,7 +344,8 @@ class MouvementStock extends CommonObject
 			$sql.= " ".($inventorycode?"'".$this->db->escape($inventorycode)."'":"null").",";
 			$sql.= " '".price2num($price)."',";
 			$sql.= " '".$fk_origin."',";
-			$sql.= " '".$origintype."'";
+			$sql.= " '".$origintype."',";
+			$sql.= " '".$oldqty."'";
 			$sql.= ")";
 
 			dol_syslog(get_class($this)."::_create insert record into stock_mouvement", LOG_DEBUG);
@@ -361,7 +362,7 @@ class MouvementStock extends CommonObject
 			}
 
 			// Define current values for qty and pmp
-			$oldqty=$product->stock_reel;
+			
 			$oldpmp=$product->pmp;
 			$oldqtywarehouse=0;
 

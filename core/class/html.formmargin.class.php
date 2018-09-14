@@ -152,7 +152,7 @@ class FormMargin
 					//if ($pv < 0)
 					//	$marginInfos['margin_on_services'] += -1 * (abs($pv) - $pa);
 					//else
-						$marginInfos['margin_on_services'] += $pv - $pa;
+						$marginInfos['margin_on_services'] += $pv  - $pa;
 				}
 			}
 		}

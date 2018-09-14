@@ -588,10 +588,11 @@ if ($id > 0 || $ref)
 				      function changevalue()
 						{
 						   //obtenemos el objeto del elemento de id x..
-						   var text2 = document.getElementById('multicurrency_price');
-
+							var text2 = document.getElementById('multicurrency_price');
+							var text3 = document.getElementById('disabled_price');
 						   //aca asignas los valores a las cajas de texto declaradas
 						   text2.value =parseInt(document.getElementById('preciocompra').value,10) + parseInt(document.getElementById('poliza').value,10)+ parseInt(document.getElementById('flete').value,10);
+						    text3.value =parseInt(document.getElementById('preciocompra').value,10) + parseInt(document.getElementById('poliza').value,10)+ parseInt(document.getElementById('flete').value,10);
 						   // ...
 						   // ....
 						}
@@ -629,7 +630,7 @@ if ($id > 0 || $ref)
 
                     // Price qty min 
                     print '<tr><td class="fieldrequired">' . $langs->trans("PriceQtyMin") . '</td>';
-                    print '<td><input class="flat" name="disabled_price" size="8" value="">';
+                    print '<td><input class="flat" id="disabled_price" name="disabled_price" size="8" value="">'; //machfree
                     print '<input type="hidden" name="price" value="">';
                     print '<input type="hidden" name="price_base_type" value="">';
                     print '&nbsp;';
@@ -879,16 +880,16 @@ SCRIPT;
                         //    print '</td>';
                         //}
 
-						// Unit price
+						// Unit price machfree
 						print '<td align="right">';
-						print price($productfourn->fourn_unitprice);
+						print price(round($productfourn->fourn_unitprice,2));
 						//print $objp->unitprice? price($objp->unitprice) : ($objp->quantity?price($objp->price/$objp->quantity):"&nbsp;");
 						print '</td>';
 
                         if ($conf->multicurrency->enabled) {
-                            // Unit price in currency
+                            // Unit price in currency machfree
                             print '<td align="right">';
-                            print price($productfourn->fourn_multicurrency_unitprice);
+                            print price(round($productfourn->fourn_multicurrency_unitprice*1.18));
                             print '</td>';
 
                             // Currency

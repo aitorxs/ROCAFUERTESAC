@@ -439,7 +439,7 @@ if (!empty($conf->projet->enabled)) $formproject=new FormProjets($db);
 $sql = "SELECT p.rowid, p.ref as product_ref, p.label as produit, p.tobatch, p.fk_product_type as type, p.entity,";
 $sql.= " e.ref as stock, e.rowid as entrepot_id, e.lieu,";
 $sql.= " m.rowid as mid, m.value as qty, m.datem, m.fk_user_author, m.label, m.inventorycode, m.fk_origin, m.origintype,";
-$sql.= " m.batch, m.price,";
+$sql.= " m.batch, m.price,m.stock_ant,";
 $sql.= " m.type_mouvement,";
 $sql.= " pl.rowid as lotid, pl.eatby, pl.sellby,";
 $sql.= " u.login, u.photo, u.lastname, u.firstname";
@@ -866,6 +866,16 @@ if ($resql)
 	    print '<input class="flat" type="text" size="4" name="search_qty" value="'.dol_escape_htmltag($search_qty).'">';
 	    print '</td>';
     }
+        if (! empty($arrayfields['m.value']['checked']))
+    {
+        // Qty machfree
+        print '<td class="liste_titre" align="right">';
+        
+        print '</td>';
+    }
+
+
+
     if (! empty($arrayfields['m.price']['checked']))
     {
     	// Price
@@ -916,8 +926,10 @@ if ($resql)
     if (! empty($arrayfields['m.type_mouvement']['checked']))	print_liste_field_titre($arrayfields['m.type_mouvement']['label'],$_SERVER["PHP_SELF"], "m.type_mouvement","",$param,'align="center"',$sortfield,$sortorder);
     if (! empty($arrayfields['origin']['checked']))             print_liste_field_titre($arrayfields['origin']['label'],$_SERVER["PHP_SELF"], "","",$param,"",$sortfield,$sortorder);
     if (! empty($arrayfields['m.value']['checked']))            print_liste_field_titre($arrayfields['m.value']['label'],$_SERVER["PHP_SELF"], "m.value","",$param,'align="right"',$sortfield,$sortorder);
+    if (! empty($arrayfields['m.value']['checked']))            print_liste_field_titre("<p>Stock Anterior</p>",$_SERVER["PHP_SELF"], "m.value","",$param,'align="right"',$sortfield,$sortorder); //machfree
     if (! empty($arrayfields['m.price']['checked']))            print_liste_field_titre($arrayfields['m.price']['label'],$_SERVER["PHP_SELF"], "m.price","",$param,'align="right"',$sortfield,$sortorder);
-
+    
+   
     // Extra fields
     include DOL_DOCUMENT_ROOT.'/core/tpl/extrafields_list_search_title.tpl.php';
 
@@ -1051,6 +1063,13 @@ if ($resql)
 	        if ($objp->qt > 0) print '+';
 	        print $objp->qty;
 	        print '</td>';
+        }
+        if (! empty($arrayfields['m.value']['checked'])) 
+        {
+         // Qty machfree
+            print '<td align="right">';
+            print $objp->stock_ant;
+            print '</td>';
         }
         if (! empty($arrayfields['m.price']['checked']))
         {

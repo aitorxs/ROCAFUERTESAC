@@ -794,8 +794,8 @@ if ($resql)
 				print '<td align="right">';
 				if ($obj->tosell)
 				{
-					if ($obj->price_base_type == 'TTC') print price($obj->price_ttc).' '.$langs->trans("TTC");
-					else print price($obj->price).' '.$langs->trans("HT");
+					if ($obj->price_base_type == 'TTC') print price($obj->price_ttc).' IGV';
+					else print price($obj->price).' '.$langs->trans("IGV");
 				}
 				print '</td>';
 				if (! $i) $totalarray['nbfield']++;
@@ -815,9 +815,9 @@ if ($resql)
 							if (! empty($conf->fournisseur->enabled) && $user->rights->fournisseur->lire)
 							{
 								$htmltext=$product_fourn->display_price_product_fournisseur(1, 1, 0, 1);
-								print $form->textwithpicto(price($product_fourn->fourn_unitprice * (1 - $product_fourn->fourn_remise_percent/100) - $product_fourn->fourn_remise).' '.$langs->trans("HT"),$htmltext);
+								print $form->textwithpicto(price(round($product_fourn->fourn_unitprice *1.18,2)).' IGV',$htmltext);
 							}
-							else print price($product_fourn->fourn_unitprice).' '.$langs->trans("HT");
+							else print price($product_fourn->fourn_unitprice*1.18).' '.$langs->trans("HT");
 						}
 					}
 				}
