@@ -4000,13 +4000,15 @@ class Product extends CommonObject
 			$warehouseStatus[] = Entrepot::STATUS_OPEN_INTERNAL;
 		}
 
-		$sql = "SELECT ps.rowid, ps.reel, ps.fk_entrepot";
-		$sql.= " FROM ".MAIN_DB_PREFIX."product_stock as ps";
-		$sql.= ", ".MAIN_DB_PREFIX."entrepot as w";
-		$sql.= " WHERE w.entity IN (".getEntity('stock').")";
-		$sql.= " AND w.rowid = ps.fk_entrepot";
-		$sql.= " AND ps.fk_product = ".$this->id;
-		if ($conf->global->ENTREPOT_EXTRA_STATUS && count($warehouseStatus)) $sql.= " AND w.statut IN (".$this->db->escape(implode(',',$warehouseStatus)).")";
+
+		$sql = "SELECT e.rowid, e.ref, e.fk_pays, e.fk_parent,";
+		$sql.= "  ps.reel as reel";
+		$sql.= " FROM ".MAIN_DB_PREFIX."entrepot as e";
+		$sql.= " LEFT JOIN ".MAIN_DB_PREFIX."product_stock as ps ON e.rowid = ps.fk_entrepot";
+		$sql.= " and ps.fk_product =".$this->id;
+		$sql.= " GROUP BY e.rowid";
+
+
 
 		dol_syslog(get_class($this)."::load_stock", LOG_DEBUG);
 		$result = $this->db->query($sql);
@@ -4014,7 +4016,7 @@ class Product extends CommonObject
 		{
 			$num = $this->db->num_rows($result);
 			$i=0;
-			print ' <table border="0"> <tr>';
+			print ' <table > ';
 			if ($num > 0)
 			{
 				while ($i < $num)
@@ -4025,36 +4027,12 @@ class Product extends CommonObject
 					$this->stock_warehouse[$row->fk_entrepot]->id = $row->rowid;
 					if ((! preg_match('/nobatch/', $option)) && $this->hasbatch()) $this->stock_warehouse[$row->fk_entrepot]->detail_batch=Productbatch::findAll($this->db, $row->rowid, 1, $this->id);
 					$this->stock_reel+=$row->reel;
-					$reel1 = round($row->reel, 1);
-					if($row->fk_entrepot==1){
-						if(! empty($row->reel)){
-						print ' <td width="30" align="left">'.$row->reel.'&nbsp;&nbsp;&nbsp;- </td>';
-						}else{
-
-						print ' <td width="30" align="center">0</td>';
-						}
-					}
-					if($row->fk_entrepot==2){
-						
-						if(! empty($row->reel)){
-						print ' <td width="10" align="center">'.$row->reel.'</td>';
-						}else{
-							if($row->reel<=0){
-						print ' <td width="30" align="center">0</td>';}
-						}
-					}
-
-					if($row->fk_entrepot==3){
-						if(! empty($row->reel)){
-						print ' <td width="30" align="right"> -&nbsp;&nbsp;&nbsp;'.$row->reel.'</td>';
-						}else{
-
-						print ' <td width="30" align="center">0</td>';
-						}
-					}
+					
+						print ' <td width="30" align="left">'.price2num($row->reel,5).'</td>';
+					
 					$i++;
 				}
-			}print '</tr></table>';
+			}print '</table>';
 			$this->db->free($result);
 
 			if (! preg_match('/novirtual/', $option))
