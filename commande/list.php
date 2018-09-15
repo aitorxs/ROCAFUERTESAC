@@ -243,7 +243,7 @@ $sql.= " state.code_departement as state_code, state.nom as state_name,";
 $sql.= ' c.rowid, c.ref, c.total_ht, c.tva as total_tva, c.total_ttc, c.ref_client,';
 $sql.= ' c.date_valid, c.date_commande, c.note_private, c.date_livraison as date_delivery, c.fk_statut, c.facture as billed,';
 $sql.= ' c.date_creation as date_creation, c.tms as date_update, c.fk_warehouse,';//machfree
-$sql.= " p.rowid as project_id, p.ref as project_ref, e.rowid, e.ref as sucursal";//machfree
+$sql.= " p.rowid as project_id, p.ref as project_ref, e.ref as sucursal";//machfree
 if ($search_categ_cus) $sql .= ", cc.fk_categorie, cc.fk_soc";
 
 // Add fields from extrafields

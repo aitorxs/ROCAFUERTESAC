@@ -3977,6 +3977,100 @@ class Product extends CommonObject
 		}
 	}
 
+	function load_stock1($option='')
+	{
+		global $conf;
+
+		$this->stock_reel = 0;
+		$this->stock_warehouse = array();
+		$this->stock_theorique = 0;
+
+		$warehouseStatus = array();
+
+		if (preg_match('/warehouseclosed/', $option))
+		{
+			$warehouseStatus[] = Entrepot::STATUS_CLOSED;
+		}
+		if (preg_match('/warehouseopen/', $option))
+		{
+			$warehouseStatus[] = Entrepot::STATUS_OPEN_ALL;
+		}
+		if (preg_match('/warehouseinternal/', $option))
+		{
+			$warehouseStatus[] = Entrepot::STATUS_OPEN_INTERNAL;
+		}
+
+		$sql = "SELECT ps.rowid, ps.reel, ps.fk_entrepot";
+		$sql.= " FROM ".MAIN_DB_PREFIX."product_stock as ps";
+		$sql.= ", ".MAIN_DB_PREFIX."entrepot as w";
+		$sql.= " WHERE w.entity IN (".getEntity('stock').")";
+		$sql.= " AND w.rowid = ps.fk_entrepot";
+		$sql.= " AND ps.fk_product = ".$this->id;
+		if ($conf->global->ENTREPOT_EXTRA_STATUS && count($warehouseStatus)) $sql.= " AND w.statut IN (".$this->db->escape(implode(',',$warehouseStatus)).")";
+
+		dol_syslog(get_class($this)."::load_stock", LOG_DEBUG);
+		$result = $this->db->query($sql);
+		if ($result)
+		{
+			$num = $this->db->num_rows($result);
+			$i=0;
+			print ' <table border="0"> <tr>';
+			if ($num > 0)
+			{
+				while ($i < $num)
+				{
+					$row = $this->db->fetch_object($result);
+					$this->stock_warehouse[$row->fk_entrepot] = new stdClass();
+					$this->stock_warehouse[$row->fk_entrepot]->real = $row->reel;
+					$this->stock_warehouse[$row->fk_entrepot]->id = $row->rowid;
+					if ((! preg_match('/nobatch/', $option)) && $this->hasbatch()) $this->stock_warehouse[$row->fk_entrepot]->detail_batch=Productbatch::findAll($this->db, $row->rowid, 1, $this->id);
+					$this->stock_reel+=$row->reel;
+					$reel1 = round($row->reel, 1);
+					if($row->fk_entrepot==1){
+						if(! empty($row->reel)){
+						print ' <td width="30" align="left">'.$row->reel.'&nbsp;&nbsp;&nbsp;- </td>';
+						}else{
+
+						print ' <td width="30" align="center">0</td>';
+						}
+					}
+					if($row->fk_entrepot==2){
+						
+						if(! empty($row->reel)){
+						print ' <td width="10" align="center">'.$row->reel.'</td>';
+						}else{
+							if($row->reel<=0){
+						print ' <td width="30" align="center">0</td>';}
+						}
+					}
+
+					if($row->fk_entrepot==3){
+						if(! empty($row->reel)){
+						print ' <td width="30" align="right"> -&nbsp;&nbsp;&nbsp;'.$row->reel.'</td>';
+						}else{
+
+						print ' <td width="30" align="center">0</td>';
+						}
+					}
+					$i++;
+				}
+			}print '</tr></table>';
+			$this->db->free($result);
+
+			if (! preg_match('/novirtual/', $option))
+			{
+			    $this->load_virtual_stock();		// This also load stats_commande_fournisseur, ...
+			}
+
+			return 1;
+		}
+		else
+		{
+			$this->error=$this->db->lasterror();
+			return -1;
+		}
+	}
+
 	/**
 	 *    Load value ->stock_theorique of a product. Property this->id must be defined.
 	 *    This function need a lot of load. If you use it on list, use a cache to execute it one for each product id.

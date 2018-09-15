@@ -627,7 +627,7 @@ if ($resql)
 			print '<td class="liste_titre">';
 			print '</td>';
 		}
-		print "<td></td>";//machfree
+		print "<td colspan=2></td>";//machfree
 		if (! empty($arrayfields['p.tosell']['checked']))
 		{
 			print '<td class="liste_titre" align="right">';
@@ -656,13 +656,14 @@ if ($resql)
 		if (! empty($arrayfields['p.barcode']['checked']))  print_liste_field_titre($arrayfields['p.barcode']['label'], $_SERVER["PHP_SELF"],"p.barcode","",$param,"",$sortfield,$sortorder);
 		if (! empty($arrayfields['p.duration']['checked']))  print_liste_field_titre($arrayfields['p.duration']['label'], $_SERVER["PHP_SELF"],"p.duration","",$param,'align="center"',$sortfield,$sortorder);
 		if (! empty($arrayfields['p.sellprice']['checked']))  print_liste_field_titre($arrayfields['p.sellprice']['label'], $_SERVER["PHP_SELF"],"","",$param,'align="right"',$sortfield,$sortorder);
-		if (! empty($arrayfields['p.minbuyprice']['checked']))  print_liste_field_titre($arrayfields['p.minbuyprice']['label'], $_SERVER["PHP_SELF"],"","",$param,'align="right"',$sortfield,$sortorder);
+		if (! empty($arrayfields['p.minbuyprice']['checked']))  print_liste_field_titre('Precio de Venta', $_SERVER["PHP_SELF"],"","",$param,'align="right"',$sortfield,$sortorder);
 		if (! empty($arrayfields['p.numbuyprice']['checked']))  print_liste_field_titre($arrayfields['p.numbuyprice']['label'], $_SERVER["PHP_SELF"],"","",$param,'align="right"',$sortfield,$sortorder);
 		if (! empty($arrayfields['p.pmp']['checked']))  print_liste_field_titre($arrayfields['p.pmp']['label'], $_SERVER["PHP_SELF"],"","",$param,'align="right"',$sortfield,$sortorder);
 		if (! empty($arrayfields['p.seuil_stock_alerte']['checked']))  print_liste_field_titre($arrayfields['p.seuil_stock_alerte']['label'], $_SERVER["PHP_SELF"],"p.seuil_stock_alerte","",$param,'align="right"',$sortfield,$sortorder);
 		if (! empty($arrayfields['p.desiredstock']['checked']))  print_liste_field_titre($arrayfields['p.desiredstock']['label'], $_SERVER["PHP_SELF"],"p.desiredstock","",$param,'align="right"',$sortfield,$sortorder);
+		if (! empty($arrayfields['p.stock']['checked']))  print_liste_field_titre('Lima&nbsp;&nbsp;Pucalpa&nbsp;&nbsp;Puerto', $_SERVER["PHP_SELF"],"p.stock","",$param,'align="right"',$sortfield,$sortorder); //MACHFREE
 		if (! empty($arrayfields['p.stock']['checked']))  print_liste_field_titre($arrayfields['p.stock']['label'], $_SERVER["PHP_SELF"],"p.stock","",$param,'align="right"',$sortfield,$sortorder);
-		if (! empty($arrayfields['p.stock']['checked']))  print_liste_field_titre('Pedido', $_SERVER["PHP_SELF"],"p.stock","",$param,'align="right"',$sortfield,$sortorder); //MACHFREE
+		if (! empty($arrayfields['p.stock']['checked']))  print_liste_field_titre('Pedido', $_SERVER["PHP_SELF"],"p.stock","",$param,'align="center"',$sortfield,$sortorder); //MACHFREE
 		if (! empty($arrayfields['stock_virtual']['checked']))  print_liste_field_titre($arrayfields['stock_virtual']['label'], $_SERVER["PHP_SELF"],"","",$param,'align="right"',$sortfield,$sortorder);
 		if (! empty($arrayfields['p.tobatch']['checked']))  print_liste_field_titre($arrayfields['p.tobatch']['label'], $_SERVER["PHP_SELF"],"p.tobatch","",$param,'align="center"',$sortfield,$sortorder);
 		if (! empty($arrayfields['p.accountancy_code_sell']['checked']))  print_liste_field_titre($arrayfields['p.accountancy_code_sell']['label'], $_SERVER["PHP_SELF"],"p.accountancy_code_sell","",$param,'',$sortfield,$sortorder);
@@ -870,6 +871,18 @@ if ($resql)
 				print '</td>';
 				if (! $i) $totalarray['nbfield']++;
 			}
+
+            // MACHFREE STOCK EN ALMACENES  
+            if (! empty($conf->stock->enabled) && $user->rights->stock->lire && $type != 1) // To optimize call of load_stock
+            {	
+              	print '<td align="left">';
+                if ($objp->fk_product_type != 1)    // Not a service
+                {
+                    $product_static->load_stock1('nobatch');             //MACHFREE Load stock_reel + stock_warehouse. This also call load_virtual_stock()
+                }
+                print '</td>';
+            }
+               
 			// Stock real
 			if (! empty($arrayfields['p.stock']['checked']))
 			{
@@ -899,7 +912,7 @@ if ($resql)
 				$sql='SELECT DISTINCT p.rowid, cfd.fk_product,cfd.qty as stockpedido, cfd.rowid as IDpedido  , cf.fk_statut as estadopedido, cf.date_livraison as tiempoentrega, cf.ref as cfreferencia FROM llx_product as p LEFT JOIN llx_commande_fournisseurdet as cfd  ON (p.rowid=cfd.fk_product ) LEFT JOIN  llx_commande_fournisseur as cf  ON  (cfd.rowid=cf.rowid) where cfd.fk_product="'.$registro.'" and cf.fk_statut>=2 and cf.fk_statut<=4';
 					$sq= mysql_query($sql, $conn)or die(mysql_error());
 
-				print '<td align="right">';
+				print '<td align="center">';
 				?>
 					<select name="clientes">
 					<?php
