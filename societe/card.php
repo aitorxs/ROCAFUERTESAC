@@ -1104,6 +1104,85 @@ else
 
         print '<table class="border" width="100%">';
 
+        print'<form class="form-horizontal" role="form" method="post" name="busqueda" id="busqueda" >';
+         print '<tr ><td  colspan="4"><table id="tbody"></table></td></tr>';
+        print '<tr>';
+        print '<td 	 class="fieldrequired" >'.fieldLabel('VATIntra','intra_vat').'</td>';
+        print '<td class="nowrap" colspan="3"><input type="text" class="flat maxwidthonsmartphone" name="tva_intra" id="intra_vat" maxlength="12" value="'.$object->tva_intra.'">';
+        print '<button  class="btn btn-success" name="btn-submit" id="btn-submit"><i class="fa fa-search"></i> Consultar</button>';
+        print '</form>';
+        print '</td>';
+        print '</tr>';
+		?>
+   
+      <script>
+	      $(document).ready(function () {
+	          $("#intra_vat").keyup(function () {
+	              var value = "CL"+ $(this).val();
+	              var value1 = "PV"+ $(this).val();
+	              $("#customer_code").val(value);
+	              $("#supplier_code").val(value1);
+	          });
+	      });
+		</script>
+
+		</script>
+
+		
+		<script src="sunat/ajaxview.js"></script>
+		<script>
+			$(document).ready(function(){
+				$("#btn-submit").click(function(e){
+					var $this = $(this);
+					e.preventDefault();
+					//$this.button('loading');
+					$.ajaxblock();
+					$.ajax({
+						data: { "intra_vat" : $("#intra_vat").val() },
+						type: "POST",
+						dataType: "json",
+						url: "sunat/consulta-sunat.php",
+					}).done(function( data, textStatus, jqXHR ){
+						if(data['success']!="false" && data['success']!=false)
+						{
+							$("#json_code").text(JSON.stringify(data, null, '\t'));
+							if(typeof(data['result'])!='undefined')
+							{
+								$("#tbody").html("");
+								$.each(data['result'], function(i, v)
+								{
+									$("#tbody").append('<input type="hidden" id='+i+' value="'+v+'&nbsp;" >');
+
+								});
+								document.getElementById('name').value = document.getElementById('name1').value;
+								document.getElementById('address').value = document.getElementById('address1').value;	
+								document.getElementById('customer_code').value = "CL"+ document.getElementById('intra_vat').value;			
+							}
+							//$this.button('reset');
+							$("#error").hide();
+							$(".result").show();
+							$.ajaxunblock();
+							
+						}
+						else
+						{
+							if(typeof(data['msg'])!='undefined')
+							{
+								alert( data['msg'] );
+							}
+							//$this.button('reset');
+							$.ajaxunblock();
+						}
+					}).fail(function( jqXHR, textStatus, errorThrown ){
+						alert( "Solicitud fallida:" + textStatus );
+						$this.button('reset');
+						$.ajaxunblock();
+					});
+				});
+			});
+		</script>
+		<?php
+
         // Name, firstname
 	    print '<tr><td class="titlefieldcreate">';
         if ($object->particulier || $private)
@@ -1211,11 +1290,11 @@ else
         print '</textarea></td></tr>';
 
         // Zip / Town
-        print '<tr><td>'.fieldLabel('Zip','zipcode').'</td><td>';
-        print $formcompany->select_ziptown($object->zip,'zipcode',array('town','selectcountry_id','state_id'), 0, 0, '', 'maxwidth100 quatrevingtpercent');
-        print '</td><td>'.fieldLabel('Town','town').'</td><td>';
-        print $formcompany->select_ziptown($object->town,'town',array('zipcode','selectcountry_id','state_id'), 0, 0, '', 'maxwidth100 quatrevingtpercent');
-        print '</td></tr>';
+        //print '<tr><td>'.fieldLabel('Zip','zipcode').'</td><td>';
+        //print $formcompany->select_ziptown($object->zip,'zipcode',array('town','selectcountry_id','state_id'), 0, 0, '', 'maxwidth100 quatrevingtpercent');
+        //print '</td><td>'.fieldLabel('Town','town').'</td><td>';
+        //print $formcompany->select_ziptown($object->town,'town',array('zipcode','selectcountry_id','state_id'), 0, 0, '', 'maxwidth100 quatrevingtpercent');
+        //print '</td></tr>';
 
         // Country
         print '<tr><td>'.fieldLabel('Country','selectcountry_id').'</td><td colspan="3" class="maxwidthonsmartphone">';
@@ -1241,7 +1320,7 @@ else
         }
 
         // Email web
-        print '<tr><td>'.fieldLabel('EMail','email',$conf->global->SOCIETE_EMAIL_MANDATORY).'</td>';
+        print '<tr><td>'.fieldLabel('EMail','email').'</td>';
 	    print '<td colspan="3"><input type="text" name="email" id="email" value="'.$object->email.'"></td></tr>';
         print '<tr><td>'.fieldLabel('Web','url').'</td>';
 	    print '<td colspan="3"><input type="text" name="url" id="url" value="'.$object->url.'"></td></tr>';
@@ -1260,59 +1339,32 @@ else
 	    print '<td><input type="text" name="fax" id="fax" class="maxwidth100onsmartphone quatrevingtpercent" value="'.$object->fax.'"></td></tr>';
 
         // Prof ids
-        $i=1; $j=0;
-        while ($i <= 6)
-        {
-            $idprof=$langs->transcountry('ProfId'.$i,$object->country_code);
-            if ($idprof!='-')
-            {
-	            $key='idprof'.$i;
+        //$i=1; $j=0;
+        //while ($i <= 6)
+        //{
+        //   $idprof=$langs->transcountry('ProfId'.$i,$object->country_code);
+        //    if ($idprof!='-')
+        //    {
+	    //        $key='idprof'.$i;
 
-                if (($j % 2) == 0) print '<tr>';
+        //      if (($j % 2) == 0) print '<tr>';
 
-                $idprof_mandatory ='SOCIETE_IDPROF'.($i).'_MANDATORY';
-                print '<td>'.fieldLabel($idprof,$key, (empty($conf->global->$idprof_mandatory)?0:1)).'</td><td>';
+        //        $idprof_mandatory ='SOCIETE_IDPROF'.($i).'_MANDATORY';
+        //        print '<td>'.fieldLabel($idprof,$key, (empty($conf->global->$idprof_mandatory)?0:1)).'</td><td>';
 
-                print $formcompany->get_input_id_prof($i, $key, $object->$key, $object->country_code);
-                print '</td>';
-                if (($j % 2) == 1) print '</tr>';
-                $j++;
-            }
-            $i++;
-        }
-        if ($j % 2 == 1) print '<td colspan="2"></td></tr>';
+        //      print $formcompany->get_input_id_prof($i, $key, $object->$key, $object->country_code);
+        //        print '</td>';
+        //        if (($j % 2) == 1) print '</tr>';
+        //        $j++;
+        //    }
+        //    $i++;
+        //}
+        //if ($j % 2 == 1) print '<td colspan="2"></td></tr>';
 
         // Vat is used
         print '<tr><td>'.fieldLabel('VATIsUsed','assujtva_value').'</td>';
         print '<td>';
         print $form->selectyesno('assujtva_value', GETPOSTISSET('assujtva_value')?GETPOST('assujtva_value','int'):1, 1);     // Assujeti par defaut en creation
-        print '</td>';
-        print '<td class="nowrap">'.fieldLabel('VATIntra','intra_vat').'</td>';
-        print '<td class="nowrap">';
-        $s = '<input type="text" class="flat maxwidthonsmartphone" name="tva_intra" id="intra_vat" maxlength="20" value="'.$object->tva_intra.'">';
-
-        if (empty($conf->global->MAIN_DISABLEVATCHECK) && isInEEC($object))
-        {
-            $s.=' ';
-
-            if (! empty($conf->use_javascript_ajax))
-            {
-                print "\n";
-                print '<script language="JavaScript" type="text/javascript">';
-                print "function CheckVAT(a) {\n";
-                print "newpopup('".DOL_URL_ROOT."/societe/checkvat/checkVatPopup.php?vatNumber='+a,'".dol_escape_js($langs->trans("VATIntraCheckableOnEUSite"))."',500,300);\n";
-                print "}\n";
-                print '</script>';
-                print "\n";
-                $s.='<a href="#" class="hideonsmartphone" onclick="javascript: CheckVAT(document.formsoc.tva_intra.value);">'.$langs->trans("VATIntraCheck").'</a>';
-                $s = $form->textwithpicto($s,$langs->trans("VATIntraCheckDesc",$langs->trans("VATIntraCheck")),1);
-            }
-            else
-            {
-                $s.='<a href="'.$langs->transcountry("VATIntraCheckURL",$object->country_id).'" target="_blank">'.img_picto($langs->trans("VATIntraCheckableOnEUSite"),'help').'</a>';
-            }
-        }
-        print $s;
         print '</td>';
         print '</tr>';
 
@@ -1657,6 +1709,82 @@ else
             print '<div class="fichecenter2">';
             print '<table class="border" width="100%">';
 
+              print'<form class="form-horizontal" role="form" method="post" name="busqueda" id="busqueda" >';
+         print '<tr ><td  colspan="4"><table id="tbody"></table></td></tr>';
+        print '<tr>';
+        print '<td 	 class="fieldrequired" >'.fieldLabel('VATIntra','intra_vat').'</td>';
+        print '<td class="nowrap" colspan="3"><input type="text" class="flat maxwidthonsmartphone" name="tva_intra" id="intra_vat" maxlength="12" value="'.$object->tva_intra.'">';
+        print '<button  class="btn btn-success" name="btn-submit" id="btn-submit"><i class="fa fa-search"></i> Actualizar</button>';
+        print '</form>';
+        print '</td>';
+        print '</tr>';
+		?>
+   
+	      <script>
+		      $(document).ready(function () {
+		          $("#intra_vat").keyup(function () {
+		              var value = "CL"+ $(this).val();
+		              var value1 = "PV"+ $(this).val();
+		              $("#customer_code").val(value);
+		              $("#supplier_code").val(value1);
+		          });
+		      });
+			</script>
+		
+			<script src="sunat/ajaxview.js"></script>
+			<script>
+				$(document).ready(function(){
+					$("#btn-submit").click(function(e){
+						var $this = $(this);
+						e.preventDefault();
+						//$this.button('loading');
+						$.ajaxblock();
+						$.ajax({
+							data: { "intra_vat" : $("#intra_vat").val() },
+							type: "POST",
+							dataType: "json",
+							url: "sunat/consulta-sunat.php",
+						}).done(function( data, textStatus, jqXHR ){
+							if(data['success']!="false" && data['success']!=false)
+							{
+								$("#json_code").text(JSON.stringify(data, null, '\t'));
+								if(typeof(data['result'])!='undefined')
+								{
+									$("#tbody").html("");
+									$.each(data['result'], function(i, v)
+									{
+										$("#tbody").append('<input type="hidden" id='+i+' value="'+v+'&nbsp;" >');
+
+									});
+									document.getElementById('name').value = document.getElementById('name1').value;
+									document.getElementById('address').value = document.getElementById('address1').value;	
+									document.getElementById('customer_code').value = "CL"+ document.getElementById('intra_vat').value;			
+								}
+								//$this.button('reset');
+								$("#error").hide();
+								$(".result").show();
+								$.ajaxunblock();
+								
+							}
+							else
+							{
+								if(typeof(data['msg'])!='undefined')
+								{
+									alert( data['msg'] );
+								}
+								//$this.button('reset');
+								$.ajaxunblock();
+							}
+						}).fail(function( jqXHR, textStatus, errorThrown ){
+							alert( "Solicitud fallida:" + textStatus );
+							$this.button('reset');
+							$.ajaxunblock();
+						});
+					});
+				});
+			</script>
+		<?php
+
             // Ref/ID
 			if (! empty($conf->global->MAIN_SHOW_TECHNICAL_ID))
 			{
@@ -1833,30 +1961,30 @@ else
 	        print '<td><input type="text" name="fax" id="fax" class="maxwidth100onsmartphone quatrevingtpercent" value="'.$object->fax.'"></td></tr>';
 
             // Prof ids
-            $i=1; $j=0;
-            while ($i <= 6)
-            {
-                $idprof=$langs->transcountry('ProfId'.$i,$object->country_code);
-                if ($idprof!='-')
-                {
-	                $key='idprof'.$i;
+            //$i=1; $j=0;
+            //while ($i <= 6)
+            //{
+              //  $idprof=$langs->transcountry('ProfId'.$i,$object->country_code);
+                //if ($idprof!='-')
+                //{
+	              //  $key='idprof'.$i;
 
-	                if (($j % 2) == 0) print '<tr>';
+	                //if (($j % 2) == 0) print '<tr>';
 
-	                $idprof_mandatory ='SOCIETE_IDPROF'.($i).'_MANDATORY';
-	                if (empty($conf->global->$idprof_mandatory) || ! $object->isACompany())
-	                    print '<td>'.fieldLabel($idprof,$key).'</td><td>';
-                    else
-	                    print '<td><span class="fieldrequired">'.fieldLabel($idprof,$key).'</td><td>';
+	                //$idprof_mandatory ='SOCIETE_IDPROF'.($i).'_MANDATORY';
+	                //if (empty($conf->global->$idprof_mandatory) || ! $object->isACompany())
+	                //    print '<td>'.fieldLabel($idprof,$key).'</td><td>';
+                    //else
+	                //    print '<td><span class="fieldrequired">'.fieldLabel($idprof,$key).'</td><td>';
 
-	                print $formcompany->get_input_id_prof($i,$key,$object->$key,$object->country_code);
-                    print '</td>';
-                    if (($j % 2) == 1) print '</tr>';
-                    $j++;
-                }
-                $i++;
-            }
-            if ($j % 2 == 1) print '<td colspan="2"></td></tr>';
+	                //print $formcompany->get_input_id_prof($i,$key,$object->$key,$object->country_code);
+                    //print '</td>';
+                    //if (($j % 2) == 1) print '</tr>';
+                    //$j++;
+                //}
+                //$i++;
+            //}
+            //if ($j % 2 == 1) print '<td colspan="2"></td></tr>';
 
             // VAT is used
             print '<tr><td>'.fieldLabel('VATIsUsed','assujtva_value').'</td><td colspan="3">';
@@ -1914,35 +2042,7 @@ else
                 print '</td></tr>';
             }
 
-            // VAT Code
-            print '<tr><td>'.fieldLabel('VATIntra','intra_vat').'</td>';
-            print '<td colspan="3">';
-            $s ='<input type="text" class="flat maxwidthonsmartphone" name="tva_intra" id="intra_vat" maxlength="20" value="'.$object->tva_intra.'">';
-
-            if (empty($conf->global->MAIN_DISABLEVATCHECK) && isInEEC($object))
-            {
-                $s.=' &nbsp; ';
-
-                if ($conf->use_javascript_ajax)
-                {
-                    print "\n";
-                    print '<script language="JavaScript" type="text/javascript">';
-                    print "function CheckVAT(a) {\n";
-                    print "newpopup('".DOL_URL_ROOT."/societe/checkvat/checkVatPopup.php?vatNumber='+a,'".dol_escape_js($langs->trans("VATIntraCheckableOnEUSite"))."',500,285);\n";
-                    print "}\n";
-                    print '</script>';
-                    print "\n";
-                    $s.='<a href="#" class="hideonsmartphone" onclick="javascript: CheckVAT(document.formsoc.tva_intra.value);">'.$langs->trans("VATIntraCheck").'</a>';
-                    $s = $form->textwithpicto($s,$langs->trans("VATIntraCheckDesc",$langs->trans("VATIntraCheck")),1);
-                }
-                else
-                {
-                    $s.='<a href="'.$langs->transcountry("VATIntraCheckURL",$object->country_id).'" class="hideonsmartphone" target="_blank">'.img_picto($langs->trans("VATIntraCheckableOnEUSite"),'help').'</a>';
-                }
-            }
-            print $s;
-            print '</td>';
-            print '</tr>';
+    
 
             // Type - Size
             print '<tr><td>'.fieldLabel('ThirdPartyType','typent_id').'</td><td class="maxwidthonsmartphone">';
@@ -2192,29 +2292,29 @@ else
         }
 
         // Prof ids
-        $i=1; $j=0;
-        while ($i <= 6)
-        {
-            $idprof=$langs->transcountry('ProfId'.$i,$object->country_code);
-            if ($idprof!='-')
-            {
+       // $i=1; $j=0;
+        //while ($i <= 6)
+        //{
+          //  $idprof=$langs->transcountry('ProfId'.$i,$object->country_code);
+            //if ($idprof!='-')
+            //{
                 //if (($j % 2) == 0) print '<tr>';
-                print '<tr>';
-            	print '<td>'.$idprof.'</td><td>';
-                $key='idprof'.$i;
-                print $object->$key;
-                if ($object->$key)
-                {
-                    if ($object->id_prof_check($i,$object) > 0) print ' &nbsp; '.$object->id_prof_url($i,$object);
-                    else print ' <font class="error">('.$langs->trans("ErrorWrongValue").')</font>';
-                }
-                print '</td>';
+              //  print '<tr>';
+            	//print '<td>'.$idprof.'</td><td>';
+             //   $key='idprof'.$i;
+             //  print $object->$key;
+             //   if ($object->$key)
+              //  {
+              //      if ($object->id_prof_check($i,$object) > 0) print ' &nbsp; '.$object->id_prof_url($i,$object);
+              //      else print ' <font class="error">('.$langs->trans("ErrorWrongValue").')</font>';
+              //  }
+              //  print '</td>';
                 //if (($j % 2) == 1) print '</tr>';
-                print '</tr>';
-                $j++;
-            }
-            $i++;
-        }
+               // print '</tr>';
+                //$j++;
+            //}
+            //$i++;
+        //}
         //if ($j % 2 == 1)  print '<td colspan="2"></td></tr>';
 
 
@@ -2328,33 +2428,13 @@ else
         // VAT Code
         print '<tr>';
 		print '<td class="nowrap">'.$langs->trans('VATIntra').'</td><td>';
-        if ($object->tva_intra)
-        {
-            $s='';
-            $s.=$object->tva_intra;
-            $s.='<input type="hidden" id="tva_intra" name="tva_intra" maxlength="20" value="'.$object->tva_intra.'">';
+	        if ($object->tva_intra)
+	        {
+	            $s='';
+	            $s.=$object->tva_intra;
+	            $s.='<input type="hidden" id="tva_intra" name="tva_intra" maxlength="20" value="'.$object->tva_intra.'">';
 
-            if (empty($conf->global->MAIN_DISABLEVATCHECK))
-            {
-                $s.=' &nbsp; ';
-
-                if ($conf->use_javascript_ajax)
-                {
-                    print "\n";
-                    print '<script language="JavaScript" type="text/javascript">';
-                    print "function CheckVAT(a) {\n";
-                    print "newpopup('".DOL_URL_ROOT."/societe/checkvat/checkVatPopup.php?vatNumber='+a,'".dol_escape_js($langs->trans("VATIntraCheckableOnEUSite"))."',500,285);\n";
-                    print "}\n";
-                    print '</script>';
-                    print "\n";
-                    $s.='<a href="#" class="hideonsmartphone" onclick="javascript: CheckVAT( $(\'#tva_intra\').val() );">'.$langs->trans("VATIntraCheck").'</a>';
-                    $s = $form->textwithpicto($s,$langs->trans("VATIntraCheckDesc",$langs->trans("VATIntraCheck")),1);
-                }
-                else
-                {
-                    $s.='<a href="'.$langs->transcountry("VATIntraCheckURL",$object->country_id).'" class="hideonsmartphone" target="_blank">'.img_picto($langs->trans("VATIntraCheckableOnEUSite"),'help').'</a>';
-                }
-            }
+           
             print $s;
         }
         else

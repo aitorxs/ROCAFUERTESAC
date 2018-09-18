@@ -1,0 +1,50 @@
+# Dolibarr language file - es_ES - massorders
+CHARSET=UTF-8
+
+Module400010Name=Mass Orders
+Module400010Desc=Agrupación de pedidos y facturación masiva
+
+MassOrders=Facturación masiva
+MASSOSetup=Configuración del módulo Mass Orders
+DefaultPayMode=Modo de pago por defecto
+DefaultPayCond=Condiciones de pago por defecto
+Shipments=Envíos
+OrdersFilter=Filtro de pedidos pendientes de procesar
+ShipmentsFilter=Filtro de envios pendientes de procesar
+CompanyRange=Intervalo de Clientes
+CustomerCategoryRange=Intervalo de Categorías de Cliente
+MassInvoicing=Facturación Masiva
+SelectGroupMode=Seleccione opciones de facturación:
+MonthGroup=Agrupar por meses
+PayModeGroup=Agrupar por modo de pago
+ValidateInvoicesAutomatically=Clasificar automáticamente como "Validadas" las facturas creadas
+ConfirmMassInvoicing=¿Quiere realizar la facturación masiva?
+ErrorFilterCompany=Error en el intervalo de clientes. El orden de los nombre no es correcto.
+ErrorFilterCategory=Error en el intervalo de categorías. El orden de los nombre no es correcto.
+ErrorCreatingInvoice=Error al crear %s facturas.
+Options=Opciones Generales
+ErrorFilterDeliveryDate=Error en el intervalo de fecha de entrega.
+OkCreatingInvoice=Las facturas se han creado correctamente
+SupplierRange=Intervalo de Proveedores
+SupplierCategoryRange=Intervalo de Categorías de Proveedores
+RefSupplierOrder=Ref. proveedor
+Propals=Presupuestos
+ListOfPropals=Listado presupuestos
+PropalsFilter=Filtro de presupuestos pendientes de procesar
+PropalDate=Fecha presupuesto
+DateEndPropalShort=Fecha fin
+CloseProcessedPropalsAutomatically=Clasificar automáticamente como "Facturados" los presupuestos seleccionados.
+CustomerOrders=Pedidos de cliente
+SupplierOrders=Pedidos a proveedor
+GenerateAutoPdf=Generar PDF automáticamente
+AutoMail=Envío automático de las facturas generadas por email.<br>-NO se enviarán facturas en estado borrador.<br>-Las facturas se enviarán al contacto de facturación del presupuesto/pedido y, en su defecto, al correo del tercero.
+AutoWithdrawal=Se realizará la petición de domiciliación de la factura si la forma de pago es Domiciliación y la factura está validada
+ShowOriginRef=Mostrar la referencia del documento origen (solo pedidos de cliente, envíos y presupuestos)
+Sendings=Envíos
+CloseProcessedShipmentsAutomatically=Clasificar automáticamente como "Cerrado" los envíos seleccionados
+
+#About
+AboutInfo=Este módulo ha sido desarrollado y distribuido por 2byte.es Soluciones Informáticas, <a href="http://www.2byte.es">www.2byte.es</a> (Preferred Partner de Dolibarr)
+MoreModules=Otros módulos desarrollados por 2byte.es están disponibles en su tienda oficial
+MoreModulesLink=<a target="_blank" href="https://shop.2byte.es/">Pulse para acceder a la tienda</a>
+ModulesHelp=Tienes disponibles manuales y vídeos de nuestros módulos externos <a target="_blank" href="https://liveagent.2byte.es/853598-M%C3%B3dulos-Oficiales-Externos-Dolibarr">aquí</a>

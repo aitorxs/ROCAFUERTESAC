@@ -2362,6 +2362,20 @@ elseif (! empty($object->id))
 					if ($user->rights->fournisseur->commande->commander)
 					{
 						print '<a class="butAction" href="'.$_SERVER["PHP_SELF"].'?id='.$object->id.'&amp;action=reopen">'.$langs->trans("ReOpen").'</a>';
+
+										// Create bill
+				if (! empty($conf->facture->enabled))
+				{
+					if (! empty($conf->fournisseur->enabled) && ($object->statut >= 2 && $object->statut != 7 && $object->billed != 1))  // statut 2 means approved, 7 means canceled
+					{
+						if ($user->rights->fournisseur->facture->creer)
+						{
+							print '<a class="butAction" href="'.DOL_URL_ROOT.'/fourn/facture/card.php?action=create&amp;origin='.$object->element.'&amp;originid='.$object->id.'&amp;socid='.$object->socid.'">'.$langs->trans("CreateBill").'</a>';
+						}
+					}
+				}
+
+
 					}
 				}
 
@@ -2389,17 +2403,6 @@ elseif (! empty($object->id))
 					}
 				}
 
-				// Create bill
-				if (! empty($conf->facture->enabled))
-				{
-					if (! empty($conf->fournisseur->enabled) && ($object->statut >= 2 && $object->statut != 7 && $object->billed != 1))  // statut 2 means approved, 7 means canceled
-					{
-						if ($user->rights->fournisseur->facture->creer)
-						{
-							print '<a class="butAction" href="'.DOL_URL_ROOT.'/fourn/facture/card.php?action=create&amp;origin='.$object->element.'&amp;originid='.$object->id.'&amp;socid='.$object->socid.'">'.$langs->trans("CreateBill").'</a>';
-						}
-					}
-				}
 
 				// Classify billed manually (need one invoice if module invoice is on, no condition on invoice if not)
 				if ($user->rights->fournisseur->commande->creer && $object->statut >= 2 && $object->statut != 7 && $object->billed != 1)  // statut 2 means approved

@@ -2500,6 +2500,11 @@ if ($action == 'create' && $user->rights->commande->creer)
 				)
 				{
 					print '<div class="inline-block divButAction"><a class="butAction" href="' . $_SERVER["PHP_SELF"] . '?id=' . $object->id . '&amp;action=validate">' . $langs->trans('Validate') . '</a></div>';
+				}
+
+				// Edit
+				if ($object->statut == Commande::STATUS_VALIDATED && $user->rights->commande->creer) {
+					print '<div class="inline-block divButAction"><a class="butAction" href="card.php?id=' . $object->id . '&amp;action=modif">' . $langs->trans('Modify') . '</a></div>';
 					//MACHFREE
 
 				?>
@@ -2516,10 +2521,6 @@ if ($action == 'create' && $user->rights->commande->creer)
    		 
 
 				<?php
-				}
-				// Edit
-				if ($object->statut == Commande::STATUS_VALIDATED && $user->rights->commande->creer) {
-					print '<div class="inline-block divButAction"><a class="butAction" href="card.php?id=' . $object->id . '&amp;action=modif">' . $langs->trans('Modify') . '</a></div>';
 				}
 				// Create event
 				/*if ($conf->agenda->enabled && ! empty($conf->global->MAIN_ADD_EVENT_ON_ELEMENT_CARD)) 				// Add hidden condition because this is not a

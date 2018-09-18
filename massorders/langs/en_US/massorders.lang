@@ -1,0 +1,50 @@
+# Dolibarr language file - en_US - orderstoinvoice
+CHARSET=UTF-8
+
+Module400010Name=Mass Orders
+Module400010Desc=Group multiple orders and massive invoicing
+
+MassOrders=Massive Invoicing
+MASSOSetup=Mass Orders module configuration
+DefaultPayMode=Default Pay Mode
+DefaultPayCond=Default Pay Conditions
+OrdersFilter=Filter of unprocessed orders
+ShipmentsFilter=Filter of unprocessed shipments
+Shipments=Shipments
+CompanyRange=Customer interval
+CustomerCategoryRange=Customer Category interval
+MassInvoicing=Massive Invoicing
+SelectGroupMode=Select billing options:
+MonthGroup=Group by Month
+PayModeGroup=Group by Pay Mode
+ValidateInvoicesAutomatically=Automatically classify as "Validated" invoices created
+ConfirmMassInvoicing=Want to bill massively?
+ErrorFilterCompany=Error in the range of customers. The order of names isn't correct.
+ErrorFilterCategory=Error in the range of categories. The order of names isn't correct.
+ErrorCreatingInvoice=Error creating %s invoices.
+Options=General Options
+ErrorFilterDeliveryDate=Error in the delivery date range.
+OkCreatingInvoice=Invoices were created successfully
+SupplierRange=Suppliers range
+SupplierCategoryRange=Suppliers categories range
+RefSupplierOrder=Supplier Ref.
+Propals=Proposals
+ListOfPropals=Proposals list
+PropalsFilter=Filter of unprocessed proposals
+PropalDate=Proposal date
+DateEndPropalShort=Date end
+CloseProcessedPropalsAutomatically=Automatically classify as "Billed" selected proposals
+CustomerOrders=Customer Orders
+SupplierOrders=Supplier Orders
+GenerateAutoPdf=PDF Automatically Generated
+AutoMail=Automatically send by email invoices generated.<br>-NOT will send invoices in draft status. <br>-Invoices are sent to the proposal/order billing contact and, failing that, to the third's email.
+AutoWithdrawal=If the payment method is withdrawal and the invoice is validated, request withdrawal of the invoice will be made
+ShowOriginRef=Display the document reference source (only customer orders, sendings and budgets)
+Sendings=Sendings
+CloseProcessedShipmentsAutomatically=Automatically classify as "Closed" selected sendings
+
+#About
+AboutInfo=This module has been developed and distributed by 2byte.es Soluciones Informáticas <a href="http://www.2byte.es"> www.2byte.es </a> (Dolibarr Preferred Partner)
+MoreModules=Other modules developed by 2byte.es are available on their official store
+MoreModulesLink=<a target="_blank" href="https://shop.2byte.es/">Click to go to the shop</a>
+ModulesHelp=You have available guides and videos of our external modules<a target="_blank" href="https://liveagent.2byte.es/853598-M%C3%B3dulos-Oficiales-Externos-Dolibarr">here</a>
