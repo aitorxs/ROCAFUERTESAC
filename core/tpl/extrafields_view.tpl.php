@@ -167,29 +167,10 @@ if (empty($reshook) && is_array($extrafields->attributes[$object->table_element]
 				//print $key.'-'.$value.'-'.$object->table_element;
 				print $extrafields->showOutputField($key, $value, '', $object->table_element);
 
-				//machfree se agrego el tracking de
-				$tracking = $value;
-				$utracking = explode("-", $tracking);
-				$prefix = $utracking[0];
-				$numero = $utracking[1];
 
-				?>
-				<link REL="stylesheet" href="../commande/tpl/style.modal.css" type="text/css" />
-				<script type="text/javascript" src="../commande/tpl/script.js"></script>
-
-				       
-				<a class="inline-block divButAction" onclick='jmgModal("miventana",{
-					title: "Vista previa",
-               		 width: 1100,
-               		 height: 85,
-        			content: "<iframe   <?php print 'src=\"https://secure.lancargo.com/etracking-web/publico/detalleGuia.do?lang=ES&prefix='.$prefix.'&number='.$numero.'&style=LA#margen-contenido\" ' ?>  > </iframe>"});'
-
-       			><span class="fa fa-search-plus" style="color: gray"></span></a>
-   		 	
-      			<?php
 			}
-			print '</td>';
-			print '</tr>' . "\n";
+			//print '</td>';
+			//print '</tr>' . "\n";
 		}
 	}
 

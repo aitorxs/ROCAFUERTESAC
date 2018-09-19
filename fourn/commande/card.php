@@ -2086,6 +2086,19 @@ elseif (! empty($object->id))
 
 	// Other attributes
 	include DOL_DOCUMENT_ROOT . '/core/tpl/extrafields_view.tpl.php';
+	
+	//machfree se agrego el tracking de
+	?>
+		<link REL="stylesheet" href="../../commande/tpl/style.modal.css" type="text/css" />
+		<script type="text/javascript" src="../../commande/tpl/script.js"></script>      
+		<a class="inline-block divButAction" onclick='jmgModal("miventana",{
+			title: "Consulta Tracking UPS",
+    		width: 700,
+            height: 85,
+        	content: "<iframe   <?php  print 'src=\"tracking/tracking.php?tracking='.$value.'\" ' ?>  > </iframe>"});'
+       		><span class="fa fa-search-plus" style="color: gray"></span></a>
+   		 </td></tr>
+     <?php
 
 	print '</table>';
 
