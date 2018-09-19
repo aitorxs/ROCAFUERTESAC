@@ -2088,6 +2088,7 @@ elseif (! empty($object->id))
 	include DOL_DOCUMENT_ROOT . '/core/tpl/extrafields_view.tpl.php';
 	
 	//machfree se agrego el tracking de
+	if($value!=null){
 	?>
 		<link REL="stylesheet" href="../../commande/tpl/style.modal.css" type="text/css" />
 		<script type="text/javascript" src="../../commande/tpl/script.js"></script>      
@@ -2099,7 +2100,7 @@ elseif (! empty($object->id))
        		><span class="fa fa-search-plus" style="color: gray"></span></a>
    		 </td></tr>
      <?php
-
+	}
 	print '</table>';
 
 	print '</div>';

@@ -169,7 +169,7 @@ if (empty($reshook) && is_array($extrafields->attributes[$object->table_element]
 
 
 			}
-			//print '</td>';
+			//print '</td>'; machfree se comento para mostrar por separado las vistas
 			//print '</tr>' . "\n";
 		}
 	}

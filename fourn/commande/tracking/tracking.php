@@ -29,6 +29,7 @@
                 
                 echo " <div class='datagrid'>";
                 $tabla = $html->find('div[class=col-xs-6]',0);
+                if($tabla!=null){
                 echo "<table><tbody><tr><td>";
                 echo  "<div class='tracking'>Tracking: ".$tracking."</div>";
                 echo  $tabla->find('div[class=ups-group ups-group_condensed]',0);
@@ -52,6 +53,10 @@
                 echo  $tabla1->find('div[class=panel-body]',0);
                 echo "</tbody></table>";
                 echo "</div>";
+            }else{
+
+                echo  "<div class='tracking'>Numero de Tracking Incorrecto.</div>";
+            }
             ?>
 
 
