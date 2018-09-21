@@ -1,0 +1,93 @@
+# Dolibarr language file - ca_ES - FacturaE
+CHARSET = UTF-8
+Module400024Name=FacturaE
+Module400024Desc=Generació de factura electrónica en format xml
+Permission4000241=Veure informació FacturaE
+Permission4000242=Gestionar informació FacturaE
+
+Facturae=FacturaE
+FacturaeFile=Fitxer FacturaE
+FacturaeSetup=Configuració FacturaE
+FacturaePayments=Mode de pagament FacturaE
+FacturaeParameters=Paràmetres FacturaE
+FactureType=Tipus de FacturaE
+RectReason=Raó rectificació
+CorrectionMethod=Mètode correcció
+FiscalPeriod=Període fiscal
+PersonTypeCode=Tipus de persona
+ResidenceTypeCode=Tipus de residència
+ContactName=Nom del contacte
+FirstSurname=Primer Cognom
+SecondSurname=Segundo Cognom
+Administrative=Administració Pública
+ComercialDiscount=Descompte comercial
+CreateFile=Crear fitxer
+CreateFileOK=Fitxer generat correctament
+DataOK=Guardat correctament
+CentreContable=Oficina contable
+CentreGestor=Órgan gestor
+CentreTramitador=Unitat tramitadora
+CentreComprador=Órgaqn comprador
+TaxType=Tipus d'impost
+
+FacturaeF=Persona física
+FacturaeJ=Persona Jurídica
+
+FacturaeR=Resident (en Espanya)
+FacturaeE=Estranger
+FacturaeU=Resident a la Unió Europea (excepte Espanya)
+
+FacturaePay01=Al comptat
+FacturaePay02=Rebut Domiciliat
+FacturaePay03=Rebut
+FacturaePay04=Transferència
+FacturaePay05=Lletra Acceptada
+FacturaePay06=Crèdit Documentari
+FacturaePay07=Contracte Adjudicació
+FacturaePay08=Lletra de canvi
+FacturaePay09=Pagaré a l'Ordre
+FacturaePay10=Pagaré No a l'Ordre
+FacturaePay11=Xec
+FacturaePay12=Reposició
+FacturaePay13=Especials
+FacturaePay14=Compensació
+FacturaePay15=Gir postal
+FacturaePay16=Xec conformat
+FacturaePay17=Xec bancari
+FacturaePay18=Pagament contra reemborsament
+FacturaePay19=Pagament mitjançant targeta
+
+FacturaeRect01=Número de la factura
+FacturaeRect02=Sèrie de la factura
+FacturaeRect03=Data expedició
+FacturaeRect04=Nom i cognoms / Raó Social-Emissor
+FacturaeRect05=Nom i cognoms / Raó Social-Receptor
+FacturaeRect06=Identificació fiscal Emissor / obligat
+FacturaeRect07=Identificació fiscal Receptor
+FacturaeRect08=Domicili Emissor / Obligat
+FacturaeRect09=Domicili Receptor
+FacturaeRect10=Detall Operació
+FacturaeRect11=Percentatge impositiu a aplicar
+FacturaeRect12=Quota tributària a aplicar
+FacturaeRect13=Data / Període a aplicar
+FacturaeRect14=Classe de factura
+FacturaeRect15=Literals legals
+FacturaeRect16=Base imposable
+FacturaeRect80=Càlcul de quotes repercutides
+FacturaeRect81=Càlcul de quotes retingudes
+FacturaeRect82=Base imposable modificada per devolució d'envasos / embalatges
+FacturaeRect83=Base imposable modificada per descomptes i bonificacions
+FacturaeRect84=Base imposable modificada per resolució ferma, judicial o administrativa
+FacturaeRect85=Base imposable modificada quotes repercutides no satisfetes. Acte de declaració de concurs
+
+FacturaeCrit01=Rectificació íntegra
+FacturaeCrit02=Rectificació per diferències
+FacturaeCrit03=Rectificació per descompte per volum d'operacions durant un període
+FacturaeCrit04=Autoritzades per l'Agència Tributària
+
+
+#About
+AboutInfo=Aquest mòdul ha estat desenvolupat i distribuït per 2byte.es Soluciones Informáticas, <a href="http://www.2byte.es"> www.2byte.es </a> (Preferred Partner de Dolibarr)
+MoreModules=Altres mòduls desenvolupats per 2byte.es estan disponibles a la seva botiga oficial
+MoreModulesLink=<a target="_blank" href="https://shop.2byte.es/">Prem per accedir a la botiga</a>
+ModulesHelp=Tens disponibles manuals i vídeos dels nostres mòduls externs <a target="_blank" href="https://liveagent.2byte.es/853598-M%C3%B3dulos-Oficiales-Externos-Dolibarr">ací</a>

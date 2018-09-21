@@ -30,7 +30,7 @@ require_once DOL_DOCUMENT_ROOT .'/core/modules/facture/modules_facture.php';
  */
 class mod_facture_mars extends ModeleNumRefFactures
 {
-	var $version='dolibarr';		// 'development', 'experimental', 'dolibarr'
+	var $version='dolimach';		// 'development', 'experimental', 'dolibarr'
 	var $prefixinvoice='FE';		//PREFIJOS DE FACTURA 
 	var $prefixreplacement='FR';
 	var $prefixdeposit='AC';
@@ -156,7 +156,7 @@ class mod_facture_mars extends ModeleNumRefFactures
 		$obj = $db->fetch_object($resql);
 		$valorunico= $obj->almacen ;
 
-		if($valorunico <= 1 ){
+		
 		// D'abord on recupere la valeur max
 		$posindice=8;
 		$sql = "SELECT MAX(CAST(SUBSTRING(facnumber FROM ".$posindice.") AS SIGNED)) as max";	// This is standard SQL
@@ -212,136 +212,8 @@ class mod_facture_mars extends ModeleNumRefFactures
 	    		return $prefix.$valorunico."-".$num;
 			}
 			else dol_print_error('','Bad parameter for getNextValue');
-
-		}else{ 
-				//machfree
-			if($valorunico <= 2){
-			// D'abord on recupere la valeur max
-		$posindice=8;
-		$sql = "SELECT MAX(CAST(SUBSTRING(facnumber FROM ".$posindice.") AS SIGNED)) as max";	// This is standard SQL
-		$sql.= " FROM ".MAIN_DB_PREFIX."facture";
-		$sql.= " WHERE facnumber LIKE '".$prefix.$valorunico."-%'";
-		$sql.= " AND entity IN (".getEntity('invoicenumber').")";
-
-		$resql=$db->query($sql);
-		dol_syslog(get_class($this)."::getNextValue", LOG_DEBUG);
-		if ($resql)
-		{
-			$obj = $db->fetch_object($resql);
-			if ($obj) $max = intval($obj->max);
-			else $max=0;
-		}
-		else
-		{
-			return -1;
-		}
-
-	
-			if ($mode == 'last')
-			{
-	    		if ($max >= (pow(10, 4) - 1)) $num=$max;	// If counter > 9999, we do not format on 4 chars, we take number as it is
-	    		else $num = sprintf("%04s",$max);
-
-	            $ref='';
-	            $sql = "SELECT facnumber as ref";
-	            $sql.= " FROM ".MAIN_DB_PREFIX."facture";
-	            $sql.= " WHERE facnumber LIKE '".$prefix.$valorunico."-".$num."'";
-	            $sql.= " AND entity IN (".getEntity('invoicenumber').")";
-
-	            dol_syslog(get_class($this)."::getNextValue", LOG_DEBUG);
-	            $resql=$db->query($sql);
-	            if ($resql)
-	            {
-	                $obj = $db->fetch_object($resql);
-	                if ($obj) $ref = $obj->ref;
-	            }
-	            else dol_print_error($db);
-
-	            return $ref;
-			}
-			else if ($mode == 'next')
-			{
-	    		$date=$facture->date;	// This is invoice date (not creation date)
-	    		$yymm = strftime("%y%m",$date);
-
-	    		if ($max >= (pow(10, 4) - 1)) $num=$max+1;	// If counter > 9999, we do not format on 4 chars, we take number as it is
-	    		else $num = sprintf("%04s",$max+1);
-
-	    		dol_syslog(get_class($this)."::getNextValue return ".$prefix.$valorunico."-".$num);
-	    		return $prefix.$valorunico."-".$num;
-			}
-			else dol_print_error('','Bad parameter for getNextValue');
-
-
-		
-
-
-	}else{
-
-	// D'abord on recupere la valeur max
-		$posindice=8;
-		$sql = "SELECT MAX(CAST(SUBSTRING(facnumber FROM ".$posindice.") AS SIGNED)) as max";	// This is standard SQL
-		$sql.= " FROM ".MAIN_DB_PREFIX."facture";
-		$sql.= " WHERE facnumber LIKE '".$prefix.$valorunico."-%'";
-		$sql.= " AND entity IN (".getEntity('invoicenumber').")";
-
-		$resql=$db->query($sql);
-		dol_syslog(get_class($this)."::getNextValue", LOG_DEBUG);
-		if ($resql)
-		{
-			$obj = $db->fetch_object($resql);
-			if ($obj) $max = intval($obj->max);
-			else $max=0;
-		}
-		else
-		{
-			return -1;
-		}
-
-	
-			if ($mode == 'last')
-			{
-	    		if ($max >= (pow(10, 4) - 1)) $num=$max;	// If counter > 9999, we do not format on 4 chars, we take number as it is
-	    		else $num = sprintf("%04s",$max);
-
-	            $ref='';
-	            $sql = "SELECT facnumber as ref";
-	            $sql.= " FROM ".MAIN_DB_PREFIX."facture";
-	            $sql.= " WHERE facnumber LIKE '".$prefix.$valorunico."____-".$num."'";
-	            $sql.= " AND entity IN (".getEntity('invoicenumber').")";
-
-	            dol_syslog(get_class($this)."::getNextValue", LOG_DEBUG);
-	            $resql=$db->query($sql);
-	            if ($resql)
-	            {
-	                $obj = $db->fetch_object($resql);
-	                if ($obj) $ref = $obj->ref;
-	            }
-	            else dol_print_error($db);
-
-	            return $ref;
-			}
-			else if ($mode == 'next')
-			{
-	    		$date=$facture->date;	// This is invoice date (not creation date)
-	    		$yymm = strftime("%y%m",$date);
-
-	    		if ($max >= (pow(10, 4) - 1)) $num=$max+1;	// If counter > 9999, we do not format on 4 chars, we take number as it is
-	    		else $num = sprintf("%04s",$max+1);
-
-	    		dol_syslog(get_class($this)."::getNextValue return ".$prefix.$valorunico."-".$num);
-	    		return $prefix.$valorunico."-".$num;
-			}
-			else dol_print_error('','Bad parameter for getNextValue');
-
-
-		}
-		
-
-
-
 	}
-	}
+	
 
 	/**
 	 * Return next free value

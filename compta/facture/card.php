@@ -860,7 +860,6 @@ if (empty($reshook))
 				$object->location_incoterms = GETPOST('location_incoterms', 'alpha');
 				$object->multicurrency_code = GETPOST('multicurrency_code', 'alpha');
 				$object->multicurrency_tx   = GETPOST('originmulticurrency_tx', 'int');
-				$object->almacen			= $_POST['almacen']; //machfree
 
 				// Proprietes particulieres a facture de remplacement
 				$object->fk_facture_source = $_POST['fac_replacement'];
@@ -913,7 +912,6 @@ if (empty($reshook))
 				$object->location_incoterms = GETPOST('location_incoterms', 'alpha');
 				$object->multicurrency_code = GETPOST('multicurrency_code', 'alpha');
 				$object->multicurrency_tx   = GETPOST('originmulticurrency_tx', 'int');
-				$object->almacen			= $_POST['almacen']; //machfree
 
 				// Proprietes particulieres a facture avoir
 				$object->fk_facture_source = $sourceinvoice > 0 ? $sourceinvoice : '';
@@ -1098,8 +1096,6 @@ if (empty($reshook))
 				$object->location_incoterms = GETPOST('location_incoterms', 'alpha');
 				$object->multicurrency_code = GETPOST('multicurrency_code', 'alpha');
 				$object->multicurrency_tx   = GETPOST('originmulticurrency_tx', 'int');
-				$object->almacen      = $_POST['almacen'];				 //machfree
-				
 
 				// Source facture
 				$object->fac_rec = GETPOST('fac_rec', 'int');
@@ -1150,7 +1146,6 @@ if (empty($reshook))
 				$object->location_incoterms = GETPOST('location_incoterms', 'alpha');
 				$object->multicurrency_code = GETPOST('multicurrency_code', 'alpha');
 				$object->multicurrency_tx   = GETPOST('originmulticurrency_tx', 'int');
-				$object->almacen      = $_POST['almacen']; //machfree
 
 				if (GETPOST('type') == Facture::TYPE_SITUATION)
 				{
@@ -1495,7 +1490,15 @@ if (empty($reshook))
 				{   // If some invoice's lines coming from page
 					$id = $object->create($user);
 
-
+					for ($i = 1; $i <= $NBLINES; $i ++) {
+						if ($_POST['idprod' . $i]) {
+							$product = new Product($db);
+							$product->fetch($_POST['idprod' . $i]);
+							$startday = dol_mktime(12, 0, 0, $_POST['date_start' . $i . 'month'], $_POST['date_start' . $i . 'day'], $_POST['date_start' . $i . 'year']);
+							$endday = dol_mktime(12, 0, 0, $_POST['date_end' . $i . 'month'], $_POST['date_end' . $i . 'day'], $_POST['date_end' . $i . 'year']);
+							$result = $object->addline($product->description, $product->price, $_POST['qty' . $i], $product->tva_tx, $product->localtax1_tx, $product->localtax2_tx, $_POST['idprod' . $i], $_POST['remise_percent' . $i], $startday, $endday, 0, 0, '', $product->price_base_type, $product->price_ttc, $product->type, -1, 0, '', 0, 0, null, 0, '', 0, 100, '', $product->fk_unit);
+						}
+					}
 				}
 			}
 		}
@@ -1562,7 +1565,6 @@ if (empty($reshook))
 				$object->mode_reglement_id = GETPOST('mode_reglement_id','int');
 				$object->remise_absolue = GETPOST('remise_absolue','int');
 				$object->remise_percent = GETPOST('remise_percent','int');
-				$object->almacen = GETPOST('almacen','int'); //machfree
 
 				// Proprietes particulieres a facture de remplacement
 
@@ -3102,17 +3104,13 @@ if ($action == 'create')
 		print '</td></tr>';
 	}
 
-	// Other attributes //machfree muestra $key y $value 
+	// Other attributes
 	$parameters = array('objectsrc' => $objectsrc,'colspan' => ' colspan="2"', 'cols'=>2);
 	$reshook = $hookmanager->executeHooks('formObjectOptions', $parameters, $object, $action); // Note that $action and $object may have been modified by hook
 	print $hookmanager->resPrint;
 	if (empty($reshook)) {
-		print $object->showOptionals($extrafields, 'edit'); //machfree muestra $key y $value 
-
+		print $object->showOptionals($extrafields, 'edit');
 	}
-
-?><script type="text/javascript">function mostrarValor(select) {  select.parentNode.querySelector("input[name=almacen]").value = select.value;}</script> <!--MACHFREE script para copiar el valor del select de almacenes a uan caja de texto-->
-<?php 
 
 	// Template to use by default
 	print '<tr><td>' . $langs->trans('Model') . '</td>';
@@ -3415,13 +3413,13 @@ else if ($id > 0 || ! empty($ref))
 	{
 		// we check object has a draft number
 		$objectref = substr($object->ref, 1, 4);
-		if ($objectref == 'PROV') {//machfree compara si la referencia empieza con esos digitos o letras.
+		if ($objectref == 'PROV') {
 			$savdate = $object->date;
 			if (! empty($conf->global->FAC_FORCE_DATE_VALIDATION)) {
 				$object->date = dol_now();
 				$object->date_lim_reglement = $object->calculate_date_lim_reglement();
 			}
-			$numref = $object->getNextNumRef($soc);//machfree
+			$numref = $object->getNextNumRef($soc);
 			// $object->date=$savdate;
 		} else {
 			$numref = $object->ref;
@@ -3921,7 +3919,49 @@ else if ($id > 0 || ! empty($ref))
 
 	// Other attributes
 	$cols = 2;
+
 	include DOL_DOCUMENT_ROOT . '/core/tpl/extrafields_view.tpl.php'; //machfree otros atributos
+	//machfree se agrego el tracking de
+	
+
+
+		//conexion a la base de datos de manera normal
+		$hostname = $dolibarr_main_db_host;
+		$database = $dolibarr_main_db_name;
+		$username = $dolibarr_main_db_user;
+		$password = $dolibarr_main_db_pass;
+		$conn = mysql_pconnect($hostname, $username, $password) or die(mysq_error());
+		mysql_select_db($database, $conn); 
+		$sql = "SELECT f.rowid ,fe.fk_object, fe.dua as dua";	// This is standard SQL
+		$sql.= " FROM llx_facture as f";
+		$sql.= ", llx_facture_extrafields as fe";
+		$sql.= " WHERE f.rowid = fe.fk_object and  fe.fk_object=".$object->id." ";
+		$sq= mysql_query($sql, $conn)or die(mysql_error());
+		$row = mysql_fetch_array($sq);
+
+		$numecorre= $row['dua'] ;
+		$tracking = $value;
+		$utracking = explode(",", $tracking);
+		$DCI = $utracking[0];
+		$codaduana = $utracking[1];
+		$anoprese = dol_print_date($object->date, 'day');
+		$anoprese1 = explode("/", $anoprese);
+		$dia = 	$anoprese1[0];
+		$mes = 	$anoprese1[1];
+		$anio = $anoprese1[2];
+	?>
+
+		<link REL="stylesheet" href="../../commande/tpl/style.modal.css" type="text/css" />
+		<script type="text/javascript" src="../../commande/tpl/script.js"></script>      
+		<a class="inline-block divButAction" onclick='jmgModal("miventana",{
+			title: "Consulta DUA",
+    		width: 900,
+            height: 85,
+        	content: "<iframe   <?php  print 'src=\"dua/dua.php?DCI='.$DCI.'&codaduana='.$codaduana.'&anoprese='.$anio.'&numecorre='.$numecorre.'\" ' ?>  > </iframe>"});'
+       		><span class="fa fa-search-plus" style="color: gray"></span></a>
+   		 </td></tr>
+     <?php
+	
 
 	print '</table>';
 

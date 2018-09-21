@@ -169,11 +169,11 @@ if (empty($reshook) && is_array($extrafields->attributes[$object->table_element]
 
 
 			}
-			//print '</td>'; machfree se comento para mostrar por separado las vistas
+			//print '</td>'; machfree se comento para mostrar por separado las vistas en pedido cliente y provedor tracking de busquedas
 			//print '</tr>' . "\n";
 		}
 	}
-
+	
 
 	// Add code to manage list depending on others
 	// TODO Test/enhance this with a more generic solution

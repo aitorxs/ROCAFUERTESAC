@@ -1,0 +1,92 @@
+# Dolibarr language file - en_US - FacturaE
+CHARSET = UTF-8
+Module400024Name=EInvoicing
+Module400024Desc=Generation of electronic invoicing in xml format
+Permission4000241=Read FacturaE
+Permission4000242=Create FacturaE
+
+Facturae=EInvoicing
+FacturaeFile=File EInvoicing
+FacturaeSetup=Configuration EInvoicing
+FacturaePayments=Payment modes EInvoicing
+FacturaeParameters=Parameters EInvoicing
+FactureType=Type EInvoicing
+RectReason=Reason rectification
+CorrectionMethod=Correction method
+FiscalPeriod=Fiscal Period
+PersonTypeCode=Type of person
+ResidenceTypeCode=Type of residence
+ContactName=Name of contact
+FirstSurname=First Surname
+SecondSurname=Second Surname
+Administrative=Public Administration
+ComercialDiscount=Commercial Off
+CreateFile=Create file
+CreateFileOK=File generated successfully
+DataOK=Saved successfully
+CentreContable=Accounting center
+CentreGestor=Management center
+CentreTramitador=Processing center
+CentreComprador=Collector center
+TaxType=Tax type
+
+FacturaeF=Persona física
+FacturaeJ=Persona Jurídica
+
+FacturaeR=Residente (en España)
+FacturaeE=Extranjero
+FacturaeU=Residente en la Unión Europea (excepto España)
+
+FacturaePay01=Al contado
+FacturaePay02=Recibo Domiciliado
+FacturaePay03=Recibo
+FacturaePay04=Transferencia
+FacturaePay05=Letra Aceptada
+FacturaePay06=Crédito Documentario
+FacturaePay07=Contrato Adjudicación
+FacturaePay08=Letra de cambio
+FacturaePay09=Pagaré a la Orden
+FacturaePay10=Pagaré No a la Orden
+FacturaePay11=Cheque
+FacturaePay12=Reposición
+FacturaePay13=Especiales
+FacturaePay14=Compensación
+FacturaePay15=Giro postal
+FacturaePay16=Cheque conformado
+FacturaePay17=Cheque bancario
+FacturaePay18=Pago contra reembolso
+FacturaePay19=Pago mediante tarjeta
+
+FacturaeRect01=Número de la factura
+FacturaeRect02=Serie de la factura
+FacturaeRect03=Fecha expedición
+FacturaeRect04=Nombre y apellidos/Razón Social-Emisor
+FacturaeRect05=Nombre y apellidos/Razón Social-Receptor
+FacturaeRect06=Identificación fiscal Emisor/obligado
+FacturaeRect07=Identificación fiscal Receptor
+FacturaeRect08=Domicilio Emisor/Obligado
+FacturaeRect09=Domicilio Receptor
+FacturaeRect10=Detalle Operación
+FacturaeRect11=Porcentaje impositivo a aplicar
+FacturaeRect12=Cuota tributaria a aplicar
+FacturaeRect13=Fecha/Periodo a aplicar
+FacturaeRect14=Clase de factura
+FacturaeRect15=Literales legales
+FacturaeRect16=Base imponible
+FacturaeRect80=Cálculo de cuotas repercutidas
+FacturaeRect81=Cálculo de cuotas retenidas
+FacturaeRect82=Base imponible modificada por devolución de envases / embalajes
+FacturaeRect83=Base imponible modificada por descuentos y bonificaciones
+FacturaeRect84=Base imponible modificada por resolución firme, judicial o administrativa
+FacturaeRect85=Base imponible modificada cuotas repercutidas no satisfechas. Auto de declaración de concurso
+
+FacturaeCrit01=Rectificación íntegra
+FacturaeCrit02=Rectificación por diferencias
+FacturaeCrit03=Rectificación por descuento por volumen de operaciones durante un periodo
+FacturaeCrit04=Autorizadas por la Agencia Tributaria
+
+#About
+AboutInfo=This module has been developed and distributed by 2byte.es Soluciones Informáticas <a href="http://www.2byte.es"> www.2byte.es </a> (Dolibarr Preferred Partner)
+MoreModules=Other modules developed by 2byte.es are available on their official store
+MoreModulesLink=<a target="_blank" href="https://shop.2byte.es/">Click to go to the shop</a>
+ModulesHelp=You have available guides and videos of our external modules<a target="_blank" href="https://liveagent.2byte.es/853598-M%C3%B3dulos-Oficiales-Externos-Dolibarr">here</a>
